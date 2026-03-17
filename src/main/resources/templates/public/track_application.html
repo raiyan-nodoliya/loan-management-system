@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Track Application</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/customer_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: navbarSection}"></div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container hero-inner">
+        <h1 class="hero-title">Track Application</h1>
+        <p class="hero-sub">Enter your application number to check current status</p>
+    </div>
+</section>
+
+<!-- CONTENT -->
+<section class="section page-bg">
+    <div class="container">
+
+        <!-- Search Card -->
+        <div class="track-card">
+            <form th:action="@{/customer/track}" method="post">
+                <div class="track-row-ui">
+                    <input name="applicationNo"
+                           class="track-input-ui"
+                           type="text"
+                           placeholder="Enter Application No. (e.g. LH-2024-0001)"
+                           th:value="${applicationNo}"
+                           required>
+
+                    <button class="btn btn-yellow track-btn-ui" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i> Track
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Not Found -->
+        <div th:if="${notFound}" class="track-result-card" style="margin-top:18px;">
+            <div class="track-result-title">
+                No application found with number
+                "<span th:text="${applicationNo}">LH-2024-0001</span>"
+            </div>
+            <div class="track-result-sub">
+                Please check the application number and try again.
+            </div>
+        </div>
+
+        <!-- Result -->
+        <div th:if="${app != null}" style="margin-top:20px;">
+
+            <!-- Application Summary -->
+            <section class="db-card db-card-pad">
+                <h2 class="db-sec-title">Application Details</h2>
+
+                <div class="db-app-detail-grid db-mt-14">
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Application No:</span>
+                        <span class="db-app-value" th:text="${app.applicationNo}">LH-2024-0001</span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Loan Type:</span>
+                        <span class="db-app-value"
+                              th:text="${app.loanType != null ? app.loanType.loanTypeName : '-'}">Personal Loan</span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Status:</span>
+                        <span class="db-pill"
+                              th:classappend="${app.status != null && app.status.statusCode == 'APPROVED'} ? ' db-pill-approved' :
+                              (${app.status != null && app.status.statusCode == 'REJECTED'} ? ' db-pill-risk' :
+                              ' db-pill-needs')"
+                              th:text="${app.status != null ? app.status.label : 'N/A'}">
+                            Submitted
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Status Code:</span>
+                        <span class="db-app-value"
+                              th:text="${app.status != null ? app.status.statusCode : '-'}">SUBMITTED</span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Applied On:</span>
+                        <span class="db-app-value"
+                              th:text="${app.createdAt != null ? #temporals.format(app.createdAt,'dd MMM yyyy') : '-'}">09 Mar 2026</span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Amount:</span>
+                        <span class="db-app-value"
+                              th:text="'₹' + ${#numbers.formatDecimal(app.amountRequested != null ? app.amountRequested : 0,0,'COMMA',0,'POINT')}">₹5,00,000</span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Tenure:</span>
+                        <span class="db-app-value"
+                              th:text="${app.tenureMonthsRequested != null ? app.tenureMonthsRequested + ' months' : '-'}">36 months</span>
+                    </div>
+
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Purpose:</span>
+                        <span class="db-app-value"
+                              th:text="${app.purpose != null ? app.purpose : '-'}">Home Renovation</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Officer Notes -->
+            <section class="db-card db-card-pad db-mt-18"
+                     th:if="${app.officerNotes != null && !#strings.isEmpty(app.officerNotes)}">
+                <h2 class="db-sec-title">Officer Notes</h2>
+                <div class="db-mt-14" th:text="${app.officerNotes}">
+                    Documents verified successfully.
+                </div>
+            </section>
+
+            <!-- Needs Info -->
+            <section class="db-card db-card-pad db-mt-18"
+                     th:if="${app.status != null && app.status.statusCode == 'NEEDS_INFO'}">
+                <h2 class="db-sec-title">Action Required</h2>
+                <div class="db-mt-14"
+                     th:text="${app.needsInfoMessage != null ? app.needsInfoMessage : 'Please upload required documents.'}">
+                    Please upload salary slip and bank statement.
+                </div>
+            </section>
+
+            <!-- Timeline -->
+            <section class="db-card db-card-pad db-mt-18">
+                <h2 class="db-sec-title">Timeline</h2>
+
+                <div class="db-timeline db-mt-14"
+                     th:if="${timelineSteps != null and !#lists.isEmpty(timelineSteps)}">
+                    <div class="db-tl-item" th:each="step : ${timelineSteps}">
+                        <div class="db-tl-dot"></div>
+                        <div>
+                            <div class="db-tl-title" th:text="${step.title}">Application submitted</div>
+                            <div class="db-tl-date" th:text="${step.date}">15 Jan 2026</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="db-doc-note"
+                     th:if="${timelineSteps == null || #lists.isEmpty(timelineSteps)}">
+                    No timeline available yet.
+                </div>
+            </section>
+
+            <!-- Documents -->
+<!--            <section class="db-card db-card-pad db-mt-18">-->
+<!--                <h2 class="db-sec-title">Documents</h2>-->
+
+<!--                <div class="db-doc-list db-mt-14">-->
+<!--                    <div class="db-doc-row" th:each="d : ${documents}">-->
+<!--                        <div class="db-doc-left">-->
+<!--                            <i class="fa-regular fa-file-lines"></i>-->
+<!--                            <span th:text="${d.documentType}">PAN</span>-->
+<!--                        </div>-->
+
+<!--                        <a class="db-btn db-btn-sm"-->
+<!--                           th:href="@{'/files/' + ${d.filePath}}"-->
+<!--                           target="_blank"-->
+<!--                           style="margin-left:auto;">-->
+<!--                            View-->
+<!--                        </a>-->
+
+<!--                        <span class="db-doc-pill"-->
+<!--                              th:text="${d.status != null ? d.status : 'UPLOADED'}">UPLOADED</span>-->
+<!--                    </div>-->
+
+<!--                    <div class="db-doc-note" th:if="${documents == null || #lists.isEmpty(documents)}">-->
+<!--                        No documents uploaded yet.-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </section>-->
+
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/customer_dashboard.js}"></script>
+</body>
+</html>

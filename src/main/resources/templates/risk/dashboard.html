@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Risk Officer Dashboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/staff_dashboard.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/staffUsersNavbar :: managerNavbarSection}"></div>
+
+<div id="toastData"
+     th:data-msg="${toastMessage}"
+     th:data-type="${toastType}">
+</div>
+
+<section class="st-hero">
+    <div class="st-hero-inner">
+        <h1 class="st-hero-title">Risk Officer Dashboard</h1>
+        <p class="st-hero-sub">Evaluate loan risk assessments</p>
+    </div>
+</section>
+
+<main class="st-wrap">
+    <div class="st-kpi-grid st-kpi-3">
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>Pending Evaluation</small>
+                <div class="st-kpi-num" th:text="${pendingEvaluation}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-regular fa-clock"></i></div>
+        </div>
+
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>High Risk Cases</small>
+                <div class="st-kpi-num" th:text="${highRiskCases}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        </div>
+
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>Completed Today</small>
+                <div class="st-kpi-num" th:text="${completedToday}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-regular fa-circle-check"></i></div>
+        </div>
+    </div>
+
+
+    <div class="st-card st-pad st-mt-20" th:if="${canViewReports}">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+            <div>
+                <h3 class="st-sec-title">Reports Access</h3>
+                <p style="margin-top:8px; color:#666;">
+                    Date-wise reports and exports are enabled for your account.
+                </p>
+            </div>
+
+            <div>
+                <a class="st-btn st-btn-secondary" th:href="@{/reports/applications}">
+                    Open Reports
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="st-card st-pad st-mt-20">
+        <table class="st-table">
+            <thead>
+            <tr>
+                <th>App No</th>
+                <th>Customer</th>
+                <th>Loan</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(applications)}">
+                <td colspan="6" style="text-align:center;">No applications available for risk evaluation</td>
+            </tr>
+
+            <tr th:each="app : ${applications}">
+                <td th:text="${app.applicationNo}">LH-2024-0002</td>
+                <td th:text="${app.customer.name}">Priya Patel</td>
+                <td th:text="${app.loanType != null ? app.loanType.loanTypeName : 'Loan'}">Home</td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(app.amountRequested, 0, 'COMMA', 0, 'POINT')}">₹35,00,000</td>
+                <td>
+                    <span class="st-pill st-pill-risk"
+                          th:text="${app.status != null ? app.status.label : 'Risk Evaluation'}">Risk Evaluation</span>
+                </td>
+                <td>
+                    <a class="st-btn st-btn-sm"
+                       th:href="@{/risk/evaluate/{id}(id=${app.applicationId})}">
+                        Evaluate
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/staff_dashboard.js}"></script>
+</body>
+</html>

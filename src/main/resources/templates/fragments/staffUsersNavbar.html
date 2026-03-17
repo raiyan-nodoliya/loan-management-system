@@ -1,0 +1,52 @@
+<!-- templates/fragments/header.html -->
+
+<header class="nav" th:fragment="managerNavbarSection">
+    <div class="container nav-row">
+        <div class="brand">
+            <div class="brand-ico">🏢</div>
+            <div class="brand-name">LoanHub</div>
+        </div>
+
+        <!-- ✅ No menu links (blank) -->
+        <nav class="nav-links"></nav>
+
+        <div class="nav-actions" style="display:flex; gap:10px; align-items:center;">
+            <!-- ✅ Logged-in name -->
+            <a class="btn btn-login" th:href="@{/manager/dashboard}">
+                <i class="fa-regular fa-circle-user" style=" font-size:18px;margin-right:6px; color:blak;"></i>
+                <span th:text="${loggedInName}">Manager</span>
+            </a>
+
+            <!-- ✅ Logout -->
+            <a class="btn btn-login" th:href="@{/staff/logout}">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</header>
+
+
+
+<header class="nav" th:fragment="riskNavbarSection">
+    <div class="container nav-row">
+        <div class="brand">
+            <div class="brand-ico"><i class="fa-regular fa-building"></i></div>
+            <div class="brand-name">LoanHub</div>
+        </div>
+
+        <nav class="nav-links"></nav>
+
+        <div class="nav-actions" style="display:flex; gap:10px; align-items:center;">
+            <a class="btn btn-login" th:href="@{/risk/dashboard}">
+                <i class="fa-regular fa-user"></i>
+                <span th:text="${#authentication != null ? #authentication.name : 'Risk Officer'}">Risk Officer</span>
+            </a>
+
+            <a class="btn btn-login" th:href="@{/staff/logout}">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Manager Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/staff_dashboard.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/staffUsersNavbar :: managerNavbarSection}"></div>
+
+<div id="toast" style="
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 320px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+    display: none;
+    overflow: hidden;
+    z-index: 9999;
+">
+    <div style="display:flex; align-items:center; gap:10px; padding:12px 12px;">
+        <div id="toastIcon" style="
+            width: 22px; height: 22px; border-radius: 50%;
+            display:flex; align-items:center; justify-content:center;
+            color:#fff; font-weight:700; font-size:14px;
+        ">!</div>
+
+        <div style="flex:1; font-weight:600; color:#111827;">
+            <span id="toastText">Message</span>
+        </div>
+
+        <button id="toastClose" type="button" style="
+            border:none; background:transparent; font-size:18px;
+            cursor:pointer; color:#6b7280;
+        ">×</button>
+    </div>
+
+    <div id="toastBar" style="height:4px; width:0%;"></div>
+</div>
+
+<div id="toastData"
+     th:data-msg="${toastMessage}"
+     th:data-type="${toastType}">
+</div>
+
+<section class="st-hero">
+    <div class="st-hero-inner">
+        <h1 class="st-hero-title">Branch Manager Dashboard</h1>
+        <p class="st-hero-sub">Approve, reject or authorize loan disbursement</p>
+    </div>
+</section>
+
+<br/>
+
+<main class="st-wrap">
+    <div class="st-kpi-grid">
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>Recommended Approve</small>
+                <div class="st-kpi-num" th:text="${recommendedApproveCount}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-regular fa-thumbs-up"></i></div>
+        </div>
+
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>Recommended Reject</small>
+                <div class="st-kpi-num" th:text="${recommendedRejectCount}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-regular fa-thumbs-down"></i></div>
+        </div>
+
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>Approved Today</small>
+                <div class="st-kpi-num" th:text="${approvedTodayCount}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-regular fa-circle-check"></i></div>
+        </div>
+
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>Disbursal Pending</small>
+                <div class="st-kpi-num" th:text="${disbursalPendingCount}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-solid fa-money-bill"></i></div>
+        </div>
+    </div>
+
+
+    <div class="st-card st-pad st-mt-20" th:if="${canViewReports}">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+            <div>
+                <h3 class="st-sec-title">Reports Access</h3>
+                <p style="margin-top:8px; color:#666;">
+                    Date-wise reports and exports are enabled for your account.
+                </p>
+            </div>
+
+            <div>
+                <a class="st-btn st-btn-secondary" th:href="@{/reports/applications}">
+                    Open Reports
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="st-card st-pad st-mt-20">
+        <table class="st-table">
+            <thead>
+            <tr>
+                <th>App No</th>
+                <th>Customer</th>
+                <th>Loan</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:if="${#lists.isEmpty(applications)}">
+                <td colspan="6" style="text-align:center;">No applications found</td>
+            </tr>
+
+            <tr th:each="app : ${applications}">
+                <td th:text="${app.applicationNo}">LH-2024-0001</td>
+                <td th:text="${app.customer != null ? app.customer.name : '-'}">Rahul Sharma</td>
+                <td th:text="${app.loanType != null ? app.loanType.loanTypeName : '-'}">Personal</td>
+                <td th:text="${app.amountRequested != null ? '₹' + #numbers.formatDecimal(app.amountRequested, 0, 'COMMA', 0, 'POINT') : '₹0'}">₹5,00,000</td>
+                <td>
+                    <span class="st-pill"
+                          th:classappend="${app.status.statusCode == 'RECOMMENDED'} ? ' st-pill-recommended' :
+                                          (${app.status.statusCode == 'APPROVED'} ? ' st-pill-approved' :
+                                          (${app.status.statusCode == 'DISBURSED'} ? ' st-pill-disbursed' : ' st-pill-rejected'))"
+                          th:text="${app.status.label}">
+                        Recommended
+                    </span>
+                </td>
+                <td>
+                    <a th:if="${app.status.statusCode == 'RECOMMENDED' || app.status.statusCode == 'APPROVED'}"
+                       class="st-btn st-btn-sm"
+                       th:href="@{/manager/decision/{id}(id=${app.applicationId})}">
+                        Decide
+                    </a>
+
+                    <button th:if="${app.status.statusCode != 'RECOMMENDED' && app.status.statusCode != 'APPROVED'}"
+                            class="st-btn st-btn-sm"
+                            type="button"
+                            disabled>
+                        Decide
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/staff_dashboard.js}"></script>
+</body>
+</html>

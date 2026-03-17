@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard - LoanHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+
+<body class="adm-page">
+
+<div class="adm-overlay" id="admOverlay"></div>
+
+<div class="adm-layout">
+
+    <div th:replace="~{fragments/admin_header :: navbarAdmin}"></div>
+
+    <main class="adm-content">
+        <div class="adm-mobbar">
+            <button class="adm-mobbtn" id="admMobBtn">☰ Open Admin Menu</button>
+        </div>
+
+        <section class="adm-topbar">
+            <div class="adm-topbar-row">
+                <div>
+                    <h1 class="adm-h-title">Branches</h1>
+                    <p class="adm-h-sub">Create branches and assign staff</p>
+                </div>
+                <div class="adm-actions">
+                    <input class="adm-search" placeholder="Search branch..." />
+                    <div class="adm-user" id="admUser">
+                        <button class="adm-user-btn" id="admUserBtn">Admin ▾</button>
+                        <div class="adm-user-menu">
+                            <a href="/admin/settings">⚙ Settings</a>
+                            <a href="/logout">🚪 Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="adm-card adm-card-pad adm-mt-16">
+            <div class="adm-sec-head">
+                <div>
+                    <h3>Add New Branch</h3>
+                    <p>Bank registered branches list</p>
+                </div>
+            </div>
+
+            <form class="adm-form" action="#" method="post">
+                <div class="adm-field">
+                    <label>Branch Name</label>
+                    <input class="adm-input" placeholder="Mumbai - Andheri"/>
+                </div>
+                <div class="adm-field">
+                    <label>Branch Code</label>
+                    <input class="adm-input" placeholder="ANDH001"/>
+                </div>
+                <div class="adm-field" style="grid-column:1/-1;">
+                    <label>Address</label>
+                    <textarea class="adm-textarea" placeholder="Full branch address"></textarea>
+                </div>
+
+                <div class="adm-form-actions">
+                    <button type="button" class="adm-btn">Reset</button>
+                    <button type="submit" class="adm-btn adm-btn-yellow">Create Branch</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="adm-card adm-card-pad adm-mt-16">
+            <div class="adm-sec-head">
+                <div>
+                    <h3>Branch List</h3>
+                    <p>All active branches</p>
+                </div>
+            </div>
+
+            <div class="adm-mt-12">
+                <table class="adm-table">
+                    <thead>
+                    <tr>
+                        <th>Branch Code</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>ANDH001</td>
+                        <td>Mumbai - Andheri</td>
+                        <td>MG Road, Mumbai</td>
+                        <td><span class="adm-pill adm-pill-approved">Active</span></td>
+                        <td><button class="adm-btn">Edit</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script th:src="@{/admin.js}"></script>
+</body>
+</html>

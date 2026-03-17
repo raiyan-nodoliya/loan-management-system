@@ -1,0 +1,52 @@
+<!-- templates/fragments/footer.html -->
+<footer class="footer" id="contact" th:fragment="footerSection">
+    <div class="container cta">
+        <h3>Ready to Get Started?</h3>
+        <p>Apply for a loan today and get quick approval</p>
+
+        <div class="cta-actions">
+            <a class="btn btn-yellow" th:href="@{/customer_login}">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+            <a class="btn btn-white" th:href="@{/contact}">Contact Us</a>
+        </div>
+    </div>
+
+    <div class="container foot-grid">
+        <div class="foot-col">
+            <div class="foot-brand">
+                <i class="fa-regular fa-building"></i>
+                <b>LoanHub</b>
+            </div>
+            <p class="foot-text">
+                Your trusted partner for all financial needs. We offer competitive loan products with transparent processing.
+            </p>
+        </div>
+
+        <div class="foot-col">
+            <h5>Quick Links</h5>
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/emi_calculator}">EMI Calculator</a>
+            <a th:href="@{/customer/track}">Track Application</a>
+            <a th:href="@{/faq_sqaure}">FAQ</a>
+        </div>
+
+        <div class="foot-col">
+            <h5>Loan Products</h5>
+            <a th:href="@{/loan_card}">Personal Loan</a>
+            <a th:href="@{/loan_card}">Home Loan</a>
+            <a th:href="@{/loan_card}">Education Loan</a>
+            <a th:href="@{/loan_card}">Vehicle Loan</a>
+        </div>
+
+        <div class="foot-col">
+            <h5>Contact Us</h5>
+            <div class="foot-line"><i class="fa-solid fa-phone"></i> 1800-XXX-XXXX</div>
+            <div class="foot-line"><i class="fa-regular fa-envelope"></i> support@loanhub.com</div>
+            <div class="foot-line"><i class="fa-solid fa-location-dot"></i> 123 Finance Street, Mumbai, India</div>
+        </div>
+    </div>
+
+    <div class="container foot-bottom">
+        <div class="foot-hr"></div>
+        <div class="copy">© 2026 Raiyan Nodoliya. All rights reserved.</div>
+    </div>
+</footer>

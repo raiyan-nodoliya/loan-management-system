@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - My Loans</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/customer_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/customerNavbarSection :: customerNavbarSection}"></div>
+
+<section class="db-hero">
+    <div class="db-hero-inner">
+        <h1 class="db-hero-title">My Loans</h1>
+        <p class="db-hero-sub">View your active and past loans</p>
+    </div>
+</section>
+
+<div class="db-wrap">
+    <div class="db-card">
+
+        <div th:if="${loans == null || #lists.isEmpty(loans)}" class="db-muted" style="padding:16px;">
+            No approved/disbursed loans found.
+        </div>
+
+        <div th:each="loan : ${loans}" class="db-loan-item">
+
+            <div class="db-loan-left">
+                <div class="db-loan-top">
+                    <div class="db-loan-id" th:text="${loan.applicationNo}">LH-2024-0001</div>
+
+                    <span class="badge"
+                          th:classappend="${loan.status != null and loan.status.statusCode == 'APPROVED'} ? ' badge-success' :
+                                          (${loan.status != null and loan.status.statusCode == 'DISBURSED'} ? ' badge-info' : ' badge-warning')"
+                          th:text="${loan.status != null ? loan.status.label : 'N/A'}">
+                        Approved
+                    </span>
+                </div>
+
+                <div class="db-loan-sub"
+                     th:text="${(loan.loanType != null ? loan.loanType.loanTypeName : 'Loan')
+                                + ' • ₹'
+                                + #numbers.formatDecimal(loan.amountRequested != null ? loan.amountRequested : 0, 0, 'COMMA', 0, 'POINT')
+                                + ' • '
+                                + (loan.tenureMonthsRequested != null ? loan.tenureMonthsRequested : 0)
+                                + ' Months'}">
+                    Personal Loan • ₹5,00,000 • 36 Months
+                </div>
+            </div>
+
+            <a class="db-btn db-btn-sm"
+               th:href="@{/customer/emi_schedule/{id}(id=${loan.applicationId})}">
+                View EMI Schedule
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/customer_dashboard.js}"></script>
+</body>
+</html>

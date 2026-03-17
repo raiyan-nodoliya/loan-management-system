@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard - LoanHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+
+<body class="adm-page">
+
+<div class="adm-overlay" id="admOverlay"></div>
+
+<div class="adm-layout">
+
+    <div th:replace="~{fragments/admin_header :: navbarAdmin}"></div>
+
+    <main class="adm-content">
+        <div class="adm-mobbar">
+            <button class="adm-mobbtn" id="admMobBtn">☰ Open Admin Menu</button>
+        </div>
+
+        <section class="adm-topbar">
+            <div class="adm-topbar-row">
+                <div>
+                    <h1 class="adm-h-title">EMI Configuration</h1>
+                    <p class="adm-h-sub">Define schedule policy for disbursed loans</p>
+                </div>
+                <div class="adm-actions">
+                    <input class="adm-search" placeholder="Search config..." />
+                    <div class="adm-user" id="admUser">
+                        <button class="adm-user-btn" id="admUserBtn">Admin ▾</button>
+                        <div class="adm-user-menu">
+                            <a href="/admin/settings">⚙ Settings</a>
+                            <a href="/logout">🚪 Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="adm-card adm-card-pad adm-mt-16">
+            <div class="adm-sec-head">
+                <div>
+                    <h3>EMI Rules</h3>
+                    <p>Set standard EMI day, grace period, late fee policy</p>
+                </div>
+            </div>
+
+            <form class="adm-form" action="#" method="post">
+                <div class="adm-field">
+                    <label>EMI Due Day (1-28)</label>
+                    <input class="adm-input" type="number" placeholder="5"/>
+                </div>
+
+                <div class="adm-field">
+                    <label>Grace Period (days)</label>
+                    <input class="adm-input" type="number" placeholder="3"/>
+                </div>
+
+                <div class="adm-field">
+                    <label>Late Fee (₹)</label>
+                    <input class="adm-input" type="number" placeholder="500"/>
+                </div>
+
+                <div class="adm-field">
+                    <label>Penalty Interest (% per month)</label>
+                    <input class="adm-input" type="number" step="0.1" placeholder="1.0"/>
+                </div>
+
+                <div class="adm-field" style="grid-column:1/-1;">
+                    <label>Notes</label>
+                    <textarea class="adm-textarea" placeholder="Policy notes..."></textarea>
+                </div>
+
+                <div class="adm-form-actions">
+                    <button type="button" class="adm-btn">Reset</button>
+                    <button type="submit" class="adm-btn adm-btn-yellow">Save Config</button>
+                </div>
+            </form>
+        </section>
+
+    </main>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

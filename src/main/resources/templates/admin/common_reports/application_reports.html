@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>LoanHub - Application Reports</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}"/>
+    <link rel="stylesheet" th:href="@{/css/staff_dashboard.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common_reports.css}"/>
+</head>
+
+<body th:class="${headerRole == 'ADMIN'} ? 'rp-page adm-page' : 'rp-page staff-page'">
+
+<th:block th:if="${headerRole == 'ADMIN'}">
+    <div class="adm-overlay" id="admOverlay"></div>
+
+    <div class="adm-layout">
+        <div th:replace="~{fragments/admin_header :: navbarAdmin}"></div>
+
+        <main class="adm-content">
+            <div class="adm-mobbar">
+                <button class="adm-mobbtn" id="admMobBtn">☰ Open Menu</button>
+            </div>
+
+            <section class="adm-topbar">
+                <div class="adm-topbar-row">
+                    <div>
+                        <h1 class="adm-h-title">Application Reports</h1>
+                        <p class="adm-h-sub">Filter, view and export loan applications</p>
+                    </div>
+                    <div class="adm-user" id="admUser">
+                        <button class="adm-user-btn" id="admUserBtn">Admin ▾</button>
+                        <div class="adm-user-menu">
+                            <a th:href="@{/admin/settings}">⚙ Settings</a>
+                            <a th:href="@{/staff/logout}">🚪 Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="adm-card adm-card-pad adm-mt-16 rp-card">
+                <div class="adm-sec-head rp-sec-head">
+                    <div>
+                        <h3>Filter Applications</h3>
+                        <p>Use date range and advanced filters</p>
+                    </div>
+                </div>
+
+                <form th:action="@{/reports/applications}" method="get" class="adm-form">
+                    <div class="rp-filter-grid">
+
+                        <div class="rp-field">
+                            <label for="fromDate">From Date</label>
+                            <input id="fromDate" name="fromDate" type="date" class="rp-input" th:value="${fromDate}"/>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="toDate">To Date</label>
+                            <input id="toDate" name="toDate" type="date" class="rp-input" th:value="${toDate}"/>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="status">Status</label>
+                            <select id="status" name="status" class="rp-input rp-select">
+                                <option value="">All</option>
+                                <option value="SUBMITTED" th:selected="${status == 'SUBMITTED'}">Submitted</option>
+                                <option value="IN_REVIEW" th:selected="${status == 'IN_REVIEW'}">In Review</option>
+                                <option value="NEEDS_INFO" th:selected="${status == 'NEEDS_INFO'}">Needs Info</option>
+                                <option value="FORWARDED_TO_RISK" th:selected="${status == 'FORWARDED_TO_RISK'}">Forwarded To Risk</option>
+                                <option value="RISK_EVALUATION" th:selected="${status == 'RISK_EVALUATION'}">Risk Evaluation</option>
+                                <option value="RISK_RECOMMENDED_APPROVE" th:selected="${status == 'RISK_RECOMMENDED_APPROVE'}">Risk Recommended Approve</option>
+                                <option value="RISK_RECOMMENDED_REJECT" th:selected="${status == 'RISK_RECOMMENDED_REJECT'}">Risk Recommended Reject</option>
+                                <option value="APPROVED" th:selected="${status == 'APPROVED'}">Approved</option>
+                                <option value="REJECTED" th:selected="${status == 'REJECTED'}">Rejected</option>
+                                <option value="DISBURSED" th:selected="${status == 'DISBURSED'}">Disbursed</option>
+                            </select>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="customerName">Customer Name</label>
+                            <input id="customerName" name="customerName" type="text" class="rp-input"
+                                   placeholder="Enter customer name" th:value="${customerName}"/>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="customerCity">Customer City</label>
+                            <input id="customerCity" name="customerCity" type="text" class="rp-input"
+                                   placeholder="Enter customer city" th:value="${customerCity}"/>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="loanTypeName">Loan Type</label>
+                            <input id="loanTypeName" name="loanTypeName" type="text" class="rp-input"
+                                   placeholder="Enter loan type" th:value="${loanTypeName}"/>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="ageRange">Age Range</label>
+                            <input id="ageRange" name="ageRange" type="text" class="rp-input"
+                                   placeholder="18-34" th:value="${ageRange}"/>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="salaryRange">Salary Range</label>
+                            <input id="salaryRange" name="salaryRange" type="text" class="rp-input"
+                                   placeholder="25000-60000" th:value="${salaryRange}"/>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="amountRange">Loan Amount Range</label>
+                            <input id="amountRange" name="amountRange" type="text" class="rp-input"
+                                   placeholder="50000-100000" th:value="${amountRange}"/>
+                        </div>
+
+                        <div class="rp-field">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" class="rp-input rp-select">
+                                <option value="">All</option>
+                                <option value="MALE" th:selected="${gender == 'MALE'}">Male</option>
+                                <option value="FEMALE" th:selected="${gender == 'FEMALE'}">Female</option>
+                                <option value="OTHER" th:selected="${gender == 'OTHER'}">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="rp-actions">
+                        <button type="submit" class="adm-btn adm-btn-yellow">Search</button>
+
+                        <a th:if="${canExport}" class="adm-btn"
+                           th:href="@{/reports/applications/export/pdf(
+                                    fromDate=${fromDate},
+                                    toDate=${toDate},
+                                    status=${status},
+                                    customerName=${customerName},
+                                    customerCity=${customerCity},
+                                    ageRange=${ageRange},
+                                    salaryRange=${salaryRange},
+                                    amountRange=${amountRange},
+                                    loanTypeName=${loanTypeName},
+                                    gender=${gender}
+                               )}">
+                            Download PDF
+                        </a>
+
+                        <a th:if="${canExport}" class="adm-btn"
+                           th:href="@{/reports/applications/export/excel(
+                                fromDate=${fromDate},
+                                toDate=${toDate},
+                                status=${status},
+                                customerName=${customerName},
+                                customerCity=${customerCity},
+                                ageRange=${ageRange},
+                                salaryRange=${salaryRange},
+                                amountRange=${amountRange},
+                                loanTypeName=${loanTypeName},
+                                gender=${gender}
+                           )}">
+                            Download Excel
+                        </a>
+
+                        <a class="adm-btn" th:href="@{/reports/applications}">Reset</a>
+                    </div>
+                </form>
+            </section>
+
+            <section class="adm-card adm-card-pad adm-mt-16 rp-card">
+                <div class="adm-sec-head rp-sec-head">
+                    <div>
+                        <h3>Applications Report</h3>
+                        <p th:text="'Total Records: ' + ${applications != null ? #lists.size(applications) : 0}">Total Records: 0</p>
+                    </div>
+                </div>
+
+                <div class="rp-table-wrap">
+                    <table class="adm-table rp-table">
+                        <thead>
+                        <tr>
+                            <th>App No</th>
+                            <th>Customer</th>
+                            <th>City</th>
+                            <th>Gender</th>
+                            <th>Loan Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${applications == null || #lists.isEmpty(applications)}">
+                            <td colspan="8" class="rp-empty">No applications found</td>
+                        </tr>
+                        <tr th:each="a : ${applications}">
+                            <td th:text="${a.applicationNo}">LA-1</td>
+                            <td th:text="${a.customer != null ? a.customer.name : 'N/A'}">Customer</td>
+                            <td th:text="${a.customer != null ? a.customer.city : 'N/A'}">City</td>
+                            <td th:text="${a.customer != null ? a.customer.gender : 'N/A'}">Gender</td>
+                            <td th:text="${a.loanType != null ? a.loanType.loanTypeName : 'N/A'}">Loan Type</td>
+                            <td th:text="${a.amountRequested != null ? '₹' + #numbers.formatDecimal(a.amountRequested, 0, 'COMMA', 2, 'POINT') : '₹0.00'}">₹0.00</td>
+                            <td th:text="${a.status != null ? a.status.label : 'N/A'}">Status</td>
+                            <td th:text="${a.createdAt != null ? #temporals.format(a.createdAt, 'yyyy-MM-dd HH:mm') : 'N/A'}">2026-03-16 10:35</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+</th:block>
+
+<th:block th:if="${headerRole == 'STAFF'}">
+    <div th:replace="~{fragments/staffUsersNavbar :: managerNavbarSection}"></div>
+
+    <main class="staff-main-content">
+        <section class="adm-topbar" style="margin:18px;">
+            <div class="adm-topbar-row">
+                <div>
+                    <h1 class="adm-h-title">Application Reports</h1>
+                    <p class="adm-h-sub">Filter, view and export loan applications</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="adm-card adm-card-pad rp-card" style="margin:18px;">
+            <div class="adm-sec-head rp-sec-head">
+                <div>
+                    <h3>Filter Applications</h3>
+                    <p>Use date range and advanced filters</p>
+                </div>
+            </div>
+
+            <form th:action="@{/reports/applications}" method="get" class="adm-form">
+                <div class="rp-filter-grid">
+
+                    <div class="rp-field">
+                        <label for="staffFromDate">From Date</label>
+                        <input id="staffFromDate" name="fromDate" type="date" class="rp-input" th:value="${fromDate}"/>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffToDate">To Date</label>
+                        <input id="staffToDate" name="toDate" type="date" class="rp-input" th:value="${toDate}"/>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffStatus">Status</label>
+                        <select id="staffStatus" name="status" class="rp-input rp-select">
+                            <option value="">All</option>
+                            <option value="SUBMITTED" th:selected="${status == 'SUBMITTED'}">Submitted</option>
+                            <option value="IN_REVIEW" th:selected="${status == 'IN_REVIEW'}">In Review</option>
+                            <option value="NEEDS_INFO" th:selected="${status == 'NEEDS_INFO'}">Needs Info</option>
+                            <option value="FORWARDED_TO_RISK" th:selected="${status == 'FORWARDED_TO_RISK'}">Forwarded To Risk</option>
+                            <option value="RISK_EVALUATION" th:selected="${status == 'RISK_EVALUATION'}">Risk Evaluation</option>
+                            <option value="RISK_RECOMMENDED_APPROVE" th:selected="${status == 'RISK_RECOMMENDED_APPROVE'}">Risk Recommended Approve</option>
+                            <option value="RISK_RECOMMENDED_REJECT" th:selected="${status == 'RISK_RECOMMENDED_REJECT'}">Risk Recommended Reject</option>
+                            <option value="APPROVED" th:selected="${status == 'APPROVED'}">Approved</option>
+                            <option value="REJECTED" th:selected="${status == 'REJECTED'}">Rejected</option>
+                            <option value="DISBURSED" th:selected="${status == 'DISBURSED'}">Disbursed</option>
+                        </select>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffCustomerName">Customer Name</label>
+                        <input id="staffCustomerName" name="customerName" type="text" class="rp-input"
+                               placeholder="Enter customer name" th:value="${customerName}"/>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffCustomerCity">Customer City</label>
+                        <input id="staffCustomerCity" name="customerCity" type="text" class="rp-input"
+                               placeholder="Enter customer city" th:value="${customerCity}"/>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffLoanTypeName">Loan Type</label>
+                        <input id="staffLoanTypeName" name="loanTypeName" type="text" class="rp-input"
+                               placeholder="Enter loan type" th:value="${loanTypeName}"/>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffAgeRange">Age Range</label>
+                        <input id="staffAgeRange" name="ageRange" type="text" class="rp-input"
+                               placeholder="18-34" th:value="${ageRange}"/>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffSalaryRange">Salary Range</label>
+                        <input id="staffSalaryRange" name="salaryRange" type="text" class="rp-input"
+                               placeholder="25000-60000" th:value="${salaryRange}"/>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffAmountRange">Loan Amount Range</label>
+                        <input id="staffAmountRange" name="amountRange" type="text" class="rp-input"
+                               placeholder="50000-100000" th:value="${amountRange}"/>
+                    </div>
+
+                    <div class="rp-field">
+                        <label for="staffGender">Gender</label>
+                        <select id="staffGender" name="gender" class="rp-input rp-select">
+                            <option value="">All</option>
+                            <option value="MALE" th:selected="${gender == 'MALE'}">Male</option>
+                            <option value="FEMALE" th:selected="${gender == 'FEMALE'}">Female</option>
+                            <option value="OTHER" th:selected="${gender == 'OTHER'}">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+<!--                <div class="rp-actions">-->
+<!--                    <button type="submit" class="adm-btn adm-btn-yellow">Search</button>-->
+<!--                    <a class="adm-btn" th:href="@{/reports/applications}">Reset</a>-->
+<!--                </div>-->
+
+
+                <div class="rp-actions">
+                    <button type="submit" class="adm-btn adm-btn-yellow">Search</button>
+
+                    <a th:if="${canExport}" class="adm-btn"
+                       th:href="@{/reports/applications/export/pdf(
+                            fromDate=${fromDate},
+                            toDate=${toDate},
+                            status=${status},
+                            customerName=${customerName},
+                            customerCity=${customerCity},
+                            ageRange=${ageRange},
+                            salaryRange=${salaryRange},
+                            amountRange=${amountRange},
+                            loanTypeName=${loanTypeName},
+                            gender=${gender}
+                       )}">
+                        Download PDF
+                    </a>
+
+                    <a th:if="${canExport}" class="adm-btn"
+                       th:href="@{/reports/applications/export/excel(
+                        fromDate=${fromDate},
+                        toDate=${toDate},
+                        status=${status},
+                        customerName=${customerName},
+                        customerCity=${customerCity},
+                        ageRange=${ageRange},
+                        salaryRange=${salaryRange},
+                        amountRange=${amountRange},
+                        loanTypeName=${loanTypeName},
+                        gender=${gender}
+                   )}">
+                        Download Excel
+                    </a>
+
+                    <a class="adm-btn" th:href="@{/reports/applications}">Reset</a>
+                </div>
+            </form>
+        </section>
+
+        <section class="adm-card adm-card-pad rp-card" style="margin:18px;">
+            <div class="adm-sec-head rp-sec-head">
+                <div>
+                    <h3>Applications Report</h3>
+                    <p th:text="'Total Records: ' + ${applications != null ? #lists.size(applications) : 0}">Total Records: 0</p>
+                </div>
+            </div>
+
+            <div class="rp-table-wrap">
+                <table class="adm-table rp-table">
+                    <thead>
+                    <tr>
+                        <th>App No</th>
+                        <th>Customer</th>
+                        <th>Loan Type</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Created Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${applications == null || #lists.isEmpty(applications)}">
+                        <td colspan="6" class="rp-empty">No applications found</td>
+                    </tr>
+                    <tr th:each="a : ${applications}">
+                        <td th:text="${a.applicationNo}">LA-1</td>
+                        <td th:text="${a.customer != null ? a.customer.name : 'N/A'}">Customer</td>
+                        <td th:text="${a.loanType != null ? a.loanType.loanTypeName : 'N/A'}">Loan Type</td>
+                        <td th:text="${a.amountRequested != null ? '₹' + #numbers.formatDecimal(a.amountRequested, 0, 'COMMA', 2, 'POINT') : '₹0.00'}">₹0.00</td>
+                        <td th:text="${a.status != null ? a.status.label : 'N/A'}">Status</td>
+                        <td th:text="${a.createdAt != null ? #temporals.format(a.createdAt, 'yyyy-MM-dd HH:mm') : 'N/A'}">2026-03-16 10:35</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</th:block>
+
+<script th:src="@{/admin.js}"></script>
+</body>
+</html>

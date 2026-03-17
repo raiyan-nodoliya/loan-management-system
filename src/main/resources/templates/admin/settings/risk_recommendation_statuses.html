@@ -1,0 +1,118 @@
+<!-- admin/risk_recommendation_statuses.html -->
+
+<div th:fragment="pageContent">
+
+    <section class="adm-topbar">
+        <div class="adm-topbar-row">
+            <div>
+                <h1 class="adm-h-title">Risk Recommendation Statuses</h1>
+                <p class="adm-h-sub">Create master codes for risk decision</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flash messages -->
+    <div class="adm-mt-12" th:if="${success}">
+        <div class="adm-alert adm-alert-success" th:text="${success}">Saved</div>
+    </div>
+
+    <div class="adm-mt-12" th:if="${error}">
+        <div class="adm-alert adm-alert-danger" th:text="${error}">Error</div>
+    </div>
+
+    <!-- Create -->
+    <section class="adm-card adm-card-pad adm-mt-16">
+        <div class="adm-sec-head">
+            <div>
+                <h3>Create Recommendation Status</h3>
+                <p>Status code unique hoga (UPPERCASE + underscore)</p>
+            </div>
+        </div>
+
+        <form th:action="@{/admin/settings/risk-recommendation-statuses}" method="post">
+            <!-- CSRF (agar enabled ho) -->
+            <input type="hidden" th:if="${_csrf != null}"
+                   th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="adm-field">
+                <label>Status Code <span style="color:red">*</span></label>
+                <input class="adm-input" type="text" name="statusCode"
+                       placeholder="e.g. RECOMMENDED_APPROVE"
+                       maxlength="50"
+                       pattern="[A-Za-z0-9_ ]+"
+                       required/>
+            </div>
+
+            <div class="adm-field">
+                <label>Label <span style="color:red">*</span></label>
+                <input class="adm-input" type="text" name="label"
+                       placeholder="e.g. Recommended - Approve"
+                       maxlength="100"
+                       required/>
+            </div>
+
+            <div class="adm-form-actions">
+                <button type="reset" class="adm-btn">Reset</button>
+                <button type="submit" class="adm-btn adm-btn-yellow">Save</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- List -->
+    <section class="adm-card adm-card-pad adm-mt-16">
+        <div class="adm-sec-head">
+            <div>
+                <h3>Existing Statuses</h3>
+                <p>These will be used in Risk Assessment dropdown</p>
+            </div>
+        </div>
+
+        <div class="adm-mt-12">
+            <table class="adm-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Code</th>
+                    <th>Label</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="s : ${statuses}">
+                    <td th:text="${s.id}">1</td>
+                    <td th:text="${s.statusCode}">RECOMMENDED_APPROVE</td>
+                    <td th:text="${s.label}">Recommended - Approve</td>
+
+                    <td>
+                        <span class="adm-pill"
+                              th:classappend="${s.active} ? ' adm-pill-approved' : ' adm-pill-risk'"
+                              th:text="${s.active} ? 'Active' : 'Disabled'">
+                        </span>
+                    </td>
+
+                    <td th:text="${s.createdAt}">2026-03-02</td>
+
+                    <td>
+                        <form th:action="@{/admin/settings/risk-recommendation-statuses/{id}/toggle(id=${s.id})}" method="post">
+                            <input type="hidden" th:if="${_csrf != null}"
+                                   th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button class="adm-btn" type="submit"
+                                    th:text="${s.active} ? 'Disable' : 'Enable'">
+                                Toggle
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                <tr th:if="${statuses == null or #lists.isEmpty(statuses)}">
+                    <td colspan="6" style="text-align:center;">No records</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>

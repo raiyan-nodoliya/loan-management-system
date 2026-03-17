@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: navbarSection}"></div>
+
+
+<section class="hero">
+    <div class="container hero-inner">
+        <h1 class="hero-title">Contact Us</h1>
+        <p class="hero-sub">We're here to help with your queries</p>
+    </div>
+</section>
+
+
+
+<section class="section page-bg contact-top-pad">
+    <div class="container">
+
+        <div class="contact-grid">
+
+            <!-- LEFT INFO CARD -->
+            <div class="contact-card">
+                <div class="contact-info">
+                    <div class="ci-row">
+                        <div class="ci-ico">📞</div>
+                        <div>
+                            <div class="ci-title">Phone</div>
+                            <div class="ci-sub">1800-XXX-XXXX (Toll Free)</div>
+                        </div>
+                    </div>
+
+                    <div class="ci-row">
+                        <div class="ci-ico">✉️</div>
+                        <div>
+                            <div class="ci-title">Email</div>
+                            <div class="ci-sub">support@loanhub.com</div>
+                        </div>
+                    </div>
+
+                    <div class="ci-row">
+                        <div class="ci-ico">📍</div>
+                        <div>
+                            <div class="ci-title">Address</div>
+                            <div class="ci-sub">123 Finance Street, BKC, Mumbai, Maharashtra 400051</div>
+                        </div>
+                    </div>
+
+                    <div class="ci-row">
+                        <div class="ci-ico">🕒</div>
+                        <div>
+                            <div class="ci-title">Working Hours</div>
+                            <div class="ci-sub">Mon–Sat: 9:00 AM - 6:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT FORM CARD -->
+            <div class="contact-card">
+                <h3 class="contact-title">Send us a message</h3>
+
+                <form class="contact-form" id="contactForm" autocomplete="off">
+                    <div class="contact-2col">
+                        <div class="c-field">
+                            <label>Name</label>
+                            <input type="text" placeholder="Your name" required>
+                        </div>
+                        <div class="c-field">
+                            <label>Email</label>
+                            <input type="email" placeholder="email@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="c-field">
+                        <label>Phone</label>
+                        <input type="tel" placeholder="9876543210" required>
+                    </div>
+
+                    <div class="c-field">
+                        <label>Subject</label>
+                        <input type="text" placeholder="How can we help?" required>
+                    </div>
+
+                    <div class="c-field">
+                        <label>Message</label>
+                        <textarea rows="5" placeholder="Describe your query..." required></textarea>
+                    </div>
+
+                    <button class="btn btn-yellow contact-btn" type="submit">Send Message</button>
+                </form>
+
+                <p class="contact-note" id="contactMsg"></p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ✅ FOOTER (your bug is here: missing quote + bracket) -->
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<!-- ✅ JS should be at end -->
+<script th:src="@{/js/loanhub.js}"></script>
+</body>
+</html>

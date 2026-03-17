@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/customer_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/customerNavbarSection :: customerNavbarSection}"></div>
+
+<section class="db-hero">
+    <div class="db-hero-inner">
+        <h1 class="db-hero-title">My Applications</h1>
+        <p class="db-hero-sub">View and track all your loan applications</p>
+    </div>
+</section>
+
+<div class="db-wrap">
+    <div class="db-card">
+        <div class="db-card-pad" style="padding:0;">
+            <table class="db-table">
+                <thead>
+                <tr>
+                    <th>App No</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="app : ${applications}">
+
+                    <td th:text="${app.applicationNo}">APP001</td>
+                    <td th:text="${app.loanType != null ? app.loanType.loanTypeName : 'N/A'}">N/A</td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(app.amountRequested,0,'COMMA',0,'POINT')}">Amount</td>
+                    <td th:text="${#temporals.format(app.createdAt,'yyyy-MM-dd')}">Date</td>
+                    <td>
+                        <span class="db-pill"
+                              th:classappend="${app.status.statusCode == 'APPROVED'} ? ' db-pill-approved' :
+                                               (${app.status.statusCode == 'REJECTED'} ? ' db-pill-risk' :
+                                               ' db-pill-needs')"
+                              th:text="${app.status.label}">
+                        </span>
+                    </td>
+
+                    <td>
+                        <a class="db-btn db-btn-sm"
+                           th:href="@{/customer/application/{id}(id=${app.applicationId})}">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${applications == null or #lists.isEmpty(applications)}">
+                    <td colspan="6" style="text-align:center;">No applications found</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- ✅ FOOTER (your bug is here: missing quote + bracket) -->
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<!-- ✅ JS should be at end -->
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/customer_dashboard.js}"></script>
+</body>
+</html>

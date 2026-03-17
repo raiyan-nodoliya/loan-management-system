@@ -1,0 +1,26 @@
+<!-- ✅ Customer Navbar -->
+<header class="nav" th:fragment="customerNavbarSection">
+    <div class="container nav-row">
+        <div class="brand">
+            <div class="brand-ico">🏢<i class=""></i></div>
+            <div class="brand-name">LoanHub</div>
+        </div>
+
+        <!-- ✅ No menu links (blank) -->
+        <nav class="nav-links"></nav>
+
+        <div class="nav-actions" style="display:flex; gap:10px; align-items:center;">
+            <!-- ✅ Logged-in customer name -->
+            <a class="btn btn-login" th:href="@{/customer/dashboard}">
+                <i class="fa-regular fa-user"></i>
+                <span th:text="${loggedInName}">Customer</span>
+            </a>
+
+            <!-- ✅ Logout -->
+            <a class="btn btn-login" th:href="@{/customer/logout}">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</header>

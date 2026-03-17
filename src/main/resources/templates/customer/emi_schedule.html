@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - EMI Schedule</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/customer_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/customerNavbarSection :: customerNavbarSection}"></div>
+
+<section class="db-hero">
+    <div class="db-hero-inner">
+        <h1 class="db-hero-title">
+            EMI Schedule —
+            <span th:text="${loanAccount != null && loanAccount.application != null ? loanAccount.application.applicationNo : 'Loan'}">LH-2024-0001</span>
+        </h1>
+        <p class="db-hero-sub"
+           th:text="${'₹' + #numbers.formatDecimal(loanAccount != null && loanAccount.sanctionAmount != null ? loanAccount.sanctionAmount : 0, 0, 'COMMA', 0, 'POINT')
+                    + ' @ '
+                    + (loanAccount != null && loanAccount.interestRateAnnual != null ? loanAccount.interestRateAnnual : 0)
+                    + '% for '
+                    + (loanAccount != null && loanAccount.tenureMonths != null ? loanAccount.tenureMonths : 0)
+                    + ' months'}">
+            ₹5,00,000 @ 11.5% for 36 months
+        </p>
+    </div>
+</section>
+
+<main class="db-wrap">
+    <section class="db-card db-card-pad">
+
+        <div class="db-row">
+            <div>
+                <h2 class="db-sec-title">Schedule</h2>
+                <p class="db-sec-sub">All monthly installments</p>
+            </div>
+
+            <a class="db-btn db-btn-sm" th:href="@{/customer/my_loans}">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <div class="db-emi-table-wrap db-mt-14">
+            <table class="db-table">
+                <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Due Date</th>
+                    <th>EMI</th>
+                    <th>Principal</th>
+                    <th>Interest</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:if="${emis == null || #lists.isEmpty(emis)}">
+                    <td colspan="6" style="text-align:center;">No EMI schedule found.</td>
+                </tr>
+
+                <tr th:each="emi : ${emis}">
+                    <td th:text="${emi.installmentNo}">1</td>
+                    <td th:text="${emi.dueDate}">2026-04-06</td>
+                    <td th:text="${'₹' + #numbers.formatDecimal(emi.emiAmount, 0, 'COMMA', 2, 'POINT')}">₹16,000.00</td>
+                    <td th:text="${'₹' + #numbers.formatDecimal(emi.principalComponent, 0, 'COMMA', 2, 'POINT')}">₹12,000.00</td>
+                    <td th:text="${'₹' + #numbers.formatDecimal(emi.interestComponent, 0, 'COMMA', 2, 'POINT')}">₹4,000.00</td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${emi.status == 'PAID'} ? ' badge-success' : ' badge-warning'"
+                              th:text="${emi.status}">
+                            PENDING
+                        </span>
+                    </td>
+                    <td>
+                        <a th:if="${emi.status == 'PENDING'}"
+                           class="db-btn db-btn-sm"
+                           th:href="@{/customer/emi/pay/{emiId}(emiId=${emi.emiId})}">
+                            Pay Now
+                        </a>
+
+                        <span th:if="${emi.status == 'PAID'}">Paid</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/customer_dashboard.js}"></script>
+</body>
+</html>

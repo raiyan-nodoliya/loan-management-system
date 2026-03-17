@@ -1,0 +1,43 @@
+<aside class="adm-sidebar" th:fragment="navbarAdmin">
+    <div class="adm-brand">
+        <div class="adm-logo">LH</div>
+        <div class="adm-title">
+            <b>LoanHub Admin</b>
+            <small>System Control Panel</small>
+        </div>
+    </div>
+
+    <nav class="adm-menu">
+        <a class="adm-link" th:href="@{/admin}">
+            <span class="adm-ico">🏠</span> Dashboard
+        </a>
+
+        <a class="adm-link" th:href="@{/admin/users}">
+            <span class="adm-ico">🧑‍💼</span> Staff Users
+        </a>
+
+        <a class="adm-link" th:href="@{/admin/staff_permissions}">
+            <span class="adm-ico">🔐</span> Report Permissions
+        </a>
+
+        <a class="adm-link" th:href="@{/reports/applications}">
+            <span class="adm-ico">📊</span> Application Reports
+        </a>
+
+        <a class="adm-link" th:href="@{/admin/audit_logs}">
+            <span class="adm-ico">📜</span> Audit Logs
+        </a>
+
+        <a class="adm-link" th:href="@{/admin/loan_rules}">
+            <span class="adm-ico">⚖️</span> Loan Rules
+        </a>
+
+        <a class="adm-link" th:href="@{/admin/emi_config}">
+            <span class="adm-ico">📆</span> EMI Config
+        </a>
+
+        <a class="adm-link" th:href="@{/admin/settings}">
+            <span class="adm-ico">⚙️</span> Settings
+        </a>
+    </nav>
+</aside>

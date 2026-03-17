@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Upload Documents - LoanHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/customer_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/customerNavbarSection :: customerNavbarSection}"></div>
+
+<section class="db-hero">
+    <div class="db-hero-inner">
+        <h1 class="db-hero-title" th:text="'Upload Documents: ' + ${app.applicationNo}">Upload</h1>
+        <p class="db-hero-sub">Please upload the requested documents to continue.</p>
+    </div>
+</section>
+
+<main class="db-wrap">
+    <div class="db-card db-pad">
+
+        <div class="db-alert db-alert-warn" th:if="${app.needsInfoMessage != null}">
+            <i class="fa-solid fa-circle-info"></i>
+            <span th:text="${app.needsInfoMessage}">Message</span>
+        </div>
+
+        <form th:action="@{/customer/application/{id}/upload(id=${app.applicationId})}"
+              method="post" enctype="multipart/form-data" class="db-form">
+
+            <div class="db-field">
+                <label class="db-label">Document Type</label>
+                <select class="db-select" name="documentType" required>
+                    <option value="" disabled selected>Select document type</option>
+                    <option value="INCOME_PROOF">Income Proof</option>
+                    <option value="AADHAAR">Aadhaar</option>
+                    <option value="PAN">PAN</option>
+                </select>
+            </div>
+
+            <div class="db-field">
+                <label class="db-label">Choose File</label>
+                <input class="db-input" type="file" name="file" required />
+            </div>
+
+            <div class="db-actions">
+                <button class="db-btn db-btn-primary" type="submit">
+                    <i class="fa-solid fa-upload"></i> Upload
+                </button>
+
+                <a class="db-btn" th:href="@{/customer/dashboard}">
+                    Back
+                </a>
+            </div>
+
+        </form>
+
+        <div class="db-card db-pad" style="margin-top:16px;" th:if="${documents != null and !#lists.isEmpty(documents)}">
+            <h3 class="db-sec-title">Latest Uploaded Documents</h3>
+
+            <div th:each="d : ${documents}" style="display:flex;justify-content:space-between;align-items:center;margin:12px 0;">
+                <span th:text="${d.documentType + ' (v' + d.versionNo + ')'}">PAN</span>
+
+                <a class="db-btn"
+                   th:href="@{'/files/' + ${d.filePath}}"
+                   target="_blank">
+                    View
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+</body>
+</html>

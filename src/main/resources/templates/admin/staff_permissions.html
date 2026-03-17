@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Staff Report Permissions - LoanHub</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+<body class="adm-page">
+
+<div class="adm-layout">
+    <div th:replace="~{fragments/admin_header :: navbarAdmin}"></div>
+
+    <main class="adm-content">
+        <section class="adm-topbar">
+            <div class="adm-topbar-row">
+                <div>
+                    <h1 class="adm-h-title">Staff Report Permissions</h1>
+                    <p class="adm-h-sub">Enable or disable report access for officer, risk officer and branch manager.</p>
+                </div>
+                <div class="adm-user" id="admUser">
+                    <button class="adm-user-btn" id="admUserBtn">Admin ▾</button>
+                    <div class="adm-user-menu">
+                        <a href="/admin/settings">⚙ Settings</a>
+                        <a href="/logout">🚪 Logout</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="adm-card adm-card-pad adm-mt-16">
+            <div class="adm-mt-12">
+                <table class="adm-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>View Reports</th>
+                        <th>Export Reports</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="staff : ${staffUsers}">
+                        <form th:action="@{/admin/staff/{id}/report-permission(id=${staff.staffId})}" method="post">
+                            <td th:text="${staff.name}">Name</td>
+                            <td th:text="${staff.email}">mail@example.com</td>
+                            <td th:text="${staff.role != null ? staff.role.roleName : 'N/A'}">BANK_OFFICER</td>
+                            <td>
+                                <input type="checkbox" name="reportViewEnabled"
+                                       th:checked="${staff.reportViewEnabled}">
+                            </td>
+                            <td>
+                                <input type="checkbox" name="reportExportEnabled"
+                                       th:checked="${staff.reportExportEnabled}">
+                            </td>
+                            <td>
+                                <button type="submit" class="adm-btn">Save</button>
+                            </td>
+                        </form>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(staffUsers)}">
+                        <td colspan="6" style="text-align:center; padding:14px;">No staff users found</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+</body>
+</html>

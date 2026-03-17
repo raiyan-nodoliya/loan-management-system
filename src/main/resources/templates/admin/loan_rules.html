@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard - LoanHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+
+<body class="adm-page">
+
+<div class="adm-overlay" id="admOverlay"></div>
+
+<div class="adm-layout">
+
+    <div th:replace="~{fragments/admin_header :: navbarAdmin}"></div>
+
+    <main class="adm-content">
+        <div class="adm-mobbar">
+            <button class="adm-mobbtn" id="admMobBtn">☰ Open Admin Menu</button>
+        </div>
+
+        <section class="adm-topbar">
+            <div class="adm-topbar-row">
+                <div>
+                    <h1 class="adm-h-title">Loan Rules</h1>
+                    <p class="adm-h-sub">Configure eligibility and limits for products</p>
+                </div>
+                <div class="adm-actions">
+                    <input class="adm-search" placeholder="Search rule..." />
+                    <div class="adm-user" id="admUser">
+                        <button class="adm-user-btn" id="admUserBtn">Admin ▾</button>
+                        <div class="adm-user-menu">
+                            <a th:href="@{/admin/settings}">⚙ Settings</a>
+                            <a th:href="@{/staff/logout}">🚪 Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div th:if="${success}" class="adm-alert adm-alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="adm-alert adm-alert-danger" th:text="${error}"></div>
+
+        <section class="adm-card adm-card-pad adm-mt-16">
+            <div class="adm-sec-head">
+                <div>
+                    <h3>Create / Update Rule</h3>
+                    <p>Example: minimum income, max amount, tenure, interest range</p>
+                </div>
+            </div>
+
+            <form class="adm-form" th:action="@{/admin/loan_rules/save}" method="post">
+                <div class="adm-field">
+                    <label>Loan Type</label>
+                    <select class="adm-select" name="loanTypeId" required>
+                        <option value="">-- Select --</option>
+
+                        <th:block th:if="${loanTypes != null and !#lists.isEmpty(loanTypes)}"
+                                  th:each="x : ${loanTypes}">
+                            <option th:value="${x.loanTypeId}"
+                                    th:text="${x.loanTypeName}">
+                            </option>
+                        </th:block>
+
+                        <option th:if="${loanTypes == null or #lists.isEmpty(loanTypes)}"
+                                value="" disabled>
+                            No loan types available
+                        </option>
+                    </select>
+                </div>
+
+                <div class="adm-field">
+                    <label>Min Monthly Income (₹)</label>
+                    <input class="adm-input"
+                           type="number"
+                           step="0.01"
+                           name="minMonthlyIncome"
+                           th:value="${selectedLoanType != null ? selectedLoanType.minMonthlyIncome : ''}"
+                           placeholder="25000"
+                           required/>
+                </div>
+
+                <div class="adm-field">
+                    <label>Max Amount (₹)</label>
+                    <input class="adm-input"
+                           type="number"
+                           step="0.01"
+                           name="maxAmount"
+                           th:value="${selectedLoanType != null ? selectedLoanType.maxAmount : ''}"
+                           placeholder="5000000"
+                           required/>
+                </div>
+
+                <div class="adm-field">
+                    <label>Max Tenure (months)</label>
+                    <input class="adm-input"
+                           type="number"
+                           name="maxTenureMonths"
+                           th:value="${selectedLoanType != null ? selectedLoanType.maxTenureMonths : ''}"
+                           placeholder="240"
+                           required/>
+                </div>
+
+                <div class="adm-field">
+                    <label>Interest Rate (min %)</label>
+                    <input class="adm-input"
+                           type="number"
+                           step="0.01"
+                           name="interestRateMin"
+                           th:value="${selectedLoanType != null ? selectedLoanType.interestRateMin : ''}"
+                           placeholder="8.5"
+                           required/>
+                </div>
+
+                <div class="adm-field">
+                    <label>Interest Rate (max %)</label>
+                    <input class="adm-input"
+                           type="number"
+                           step="0.01"
+                           name="interestRateMax"
+                           th:value="${selectedLoanType != null ? selectedLoanType.interestRateMax : ''}"
+                           placeholder="13.5"
+                           required/>
+                </div>
+
+                <div class="adm-form-actions">
+                    <a th:href="@{/admin/loan_rules}" class="adm-btn">Reset</a>
+                    <button type="submit" class="adm-btn adm-btn-yellow">Save Rule</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="adm-card adm-card-pad adm-mt-16">
+            <div class="adm-sec-head">
+                <div>
+                    <h3>Active Rules</h3>
+                    <p>Applied during customer apply flow</p>
+                </div>
+            </div>
+
+            <div class="adm-mt-12">
+                <table class="adm-table">
+                    <thead>
+                    <tr>
+                        <th>Loan Type</th>
+                        <th>Min Income</th>
+                        <th>Max Amount</th>
+                        <th>Tenure</th>
+                        <th>Interest Range</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${loanTypes == null or #lists.isEmpty(loanTypes)}">
+                        <td colspan="6" style="text-align:center;">No loan rules found</td>
+                    </tr>
+
+                    <th:block th:if="${loanTypes != null and !#lists.isEmpty(loanTypes)}"
+                              th:each="x : ${loanTypes}">
+                        <tr>
+                            <td th:text="${x.loanTypeName}">Personal</td>
+
+                            <td th:text="${x.minMonthlyIncome != null ? '₹' + #numbers.formatDecimal(x.minMonthlyIncome, 0, 'COMMA', 2, 'POINT') : '-'}">
+                                ₹25,000.00
+                            </td>
+
+                            <td th:text="${x.maxAmount != null ? '₹' + #numbers.formatDecimal(x.maxAmount, 0, 'COMMA', 2, 'POINT') : '-'}">
+                                ₹25,00,000.00
+                            </td>
+
+                            <td th:text="${x.maxTenureMonths != null ? x.maxTenureMonths : '-'}">60</td>
+
+                            <td th:text="${(x.interestRateMin != null ? x.interestRateMin : 0) + '% - ' + (x.interestRateMax != null ? x.interestRateMax : 0) + '%'}">
+                                10.5% - 13.5%
+                            </td>
+
+                            <td>
+                                <input class="adm-input"
+                                       type="number"
+                                       step="0.01"
+                                       min="0"
+                                       name="minMonthlyIncome"
+                                       th:value="${selectedLoanType != null ? selectedLoanType.minMonthlyIncome : ''}"
+                                       placeholder="25000"
+                                       required/>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

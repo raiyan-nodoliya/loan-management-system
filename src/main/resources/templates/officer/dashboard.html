@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Officer Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/staff_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/staffUsersNavbar :: managerNavbarSection}"></div>
+
+<section class="st-hero">
+    <div class="st-hero-inner">
+        <h1 class="st-hero-title">Officer Dashboard</h1>
+        <p class="st-hero-sub">Review and process loan applications</p>
+    </div>
+</section>
+
+<main class="st-wrap">
+
+    <div class="st-kpi-grid st-kpi-3">
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>New Submitted</small>
+                <div class="st-kpi-num" th:text="${submittedCount}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-solid fa-inbox"></i></div>
+        </div>
+
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>Needs Info</small>
+                <div class="st-kpi-num" th:text="${needsInfoCount}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-regular fa-circle-question"></i></div>
+        </div>
+
+        <div class="st-kpi">
+            <div class="st-kpi-left">
+                <small>In Review</small>
+                <div class="st-kpi-num" th:text="${inReviewCount}">0</div>
+            </div>
+            <div class="st-kpi-ico"><i class="fa-regular fa-eye"></i></div>
+        </div>
+    </div>
+
+    <div class="st-card st-pad st-mt-20" th:if="${canViewReports}">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+            <div>
+                <h3 class="st-sec-title">Reports Access</h3>
+                <p style="margin-top:8px; color:#666;">
+                    Date-wise filters, PDF export and Excel export are enabled for your account.
+                </p>
+            </div>
+
+            <div>
+                <a class="st-btn st-btn-secondary" th:href="@{/reports/applications}">
+                    Open Reports
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="st-card st-pad st-mt-20">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+            <h3 class="st-sec-title">Application Queue</h3>
+
+            <a th:if="${canViewReports}" class="st-btn st-btn-secondary" th:href="@{/reports/applications}">
+                Open Reports
+            </a>
+        </div>
+
+        <div class="st-mt-12">
+            <table class="st-table">
+                <thead>
+                <tr>
+                    <th>App No</th>
+                    <th>Customer</th>
+                    <th>Loan</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:if="${applications == null || #lists.isEmpty(applications)}">
+                    <td colspan="7" style="padding:14px;">No applications found.</td>
+                </tr>
+
+                <tr th:each="a : ${applications}">
+                    <td th:text="${a.applicationNo}">LH-XXXX</td>
+                    <td th:text="${a.customer != null ? a.customer.name : 'N/A'}">Customer</td>
+                    <td th:text="${a.loanType != null ? a.loanType.loanTypeName : 'Loan'}">Loan</td>
+                    <td th:text="${a.amountRequested != null ? '₹' + a.amountRequested : '₹0'}">₹0</td>
+                    <td th:text="${a.createdAt != null ? #temporals.format(a.createdAt, 'yyyy-MM-dd') : 'N/A'}">2026-03-05</td>
+
+                    <td>
+                        <span class="st-pill"
+                              th:classappend="
+                                  ${a.status != null and a.status.statusCode == 'SUBMITTED'} ? ' st-pill-submitted' :
+                                  (${a.status != null and a.status.statusCode == 'NEEDS_INFO'} ? ' st-pill-pending' :
+                                  (${a.status != null and a.status.statusCode == 'IN_REVIEW'} ? ' st-pill-inreview' :
+                                  (${a.status != null and (a.status.statusCode == 'FORWARDED_TO_RISK' or a.status.statusCode == 'RISK_EVALUATION')} ? ' st-pill-pending' :
+                                  (${a.status != null and a.status.statusCode == 'APPROVED'} ? ' st-pill-approved' :
+                                  (${a.status != null and a.status.statusCode == 'REJECTED'} ? ' st-pill-rejected' : '')))))
+                              "
+                              th:text="${a.status != null ? a.status.label : 'N/A'}">
+                            N/A
+                        </span>
+                    </td>
+
+                    <td>
+                        <a class="st-btn st-btn-sm"
+                           th:href="@{/officer/application/{id}(id=${a.applicationId})}">
+                            Review
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!--<div th:replace="~{fragments/footer :: footerSection}"></div>-->
+
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/staff_dashboard.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Staff Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: navbarSection}"></div>
+
+<!-- TOAST -->
+<div id="toast" style="
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 320px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+    display: none;
+    overflow: hidden;
+    z-index: 9999;
+">
+    <div style="display:flex; align-items:center; gap:10px; padding:12px 12px;">
+        <div id="toastIcon" style="
+            width: 22px; height: 22px; border-radius: 50%;
+            display:flex; align-items:center; justify-content:center;
+            color:#fff; font-weight:700; font-size:14px;
+        ">!</div>
+
+        <div style="flex:1; font-weight:600; color:#111827;">
+            <span id="toastText">Message</span>
+        </div>
+
+        <button id="toastClose" type="button" style="
+            border:none; background:transparent; font-size:18px;
+            cursor:pointer; color:#6b7280;
+        ">×</button>
+    </div>
+
+    <div id="toastBar" style="height:4px; width:0%;"></div>
+</div>
+
+<section class="hero">
+    <div class="container hero-inner">
+        <h1 class="hero-title">Staff Login</h1>
+        <p class="hero-sub">Access your staff dashboard</p>
+    </div>
+</section>
+
+<section class="section page-bg">
+    <div class="container">
+        <div class="auth-wrap">
+            <div class="contact-card auth-card">
+
+                <div id="toastData"
+                     th:data-msg="${toastMessage}"
+                     th:data-type="${toastType}">
+                </div>
+
+                <form class="contact-form" th:action="@{/staff/login}" method="post">
+
+                    <div class="c-field">
+                        <label>Username</label>
+                        <input type="email" name="email" placeholder="staff@loanhub.com" required>
+                    </div>
+
+                    <div class="c-field">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="auth-links-right" style="margin-top:-10px; margin-bottom:20px; text-align:right;">
+                        <a class="auth-link" th:href="@{/auth/forgot-password}" style="font-size:0.85rem;">
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <button class="btn btn-yellow auth-btn" type="submit">Login</button>
+
+                    <div class="auth-links">
+                        <a class="auth-link" th:href="@{/customer_login}">← Customer Login</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+<script th:src="@{/js/loanhub.js}"></script>
+</body>
+</html>

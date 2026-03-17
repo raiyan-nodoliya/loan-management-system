@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/customer_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/customerNavbarSection :: customerNavbarSection}"></div>
+
+<section class="db-hero">
+    <div class="db-hero-inner">
+        <h1 class="db-hero-title" th:text="'Application ' + ${app.applicationNo}">
+            Application LH-2024-0001
+        </h1>
+
+        <p class="db-hero-sub"
+           th:text="(${app.loanType != null ? app.loanType.loanTypeName : 'Loan'}) + ' — Requested ₹' +
+            ${#numbers.formatDecimal(app.amountRequested != null ? app.amountRequested : 0,0,'COMMA',0,'POINT')}">
+            Personal Loan — Requested ₹5,00,000
+        </p>
+    </div>
+</section>
+
+<main class="db-wrap">
+    <div class="db-app-grid">
+
+        <div>
+            <section class="db-card db-card-pad">
+                <h2 class="db-sec-title">Application Details</h2>
+
+                <div class="db-app-detail-grid db-mt-14">
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Status:</span>
+
+                        <span class="db-pill"
+                              th:classappend="${app.status != null and (app.status.statusCode == 'APPROVED' or app.status.statusCode == 'CUSTOMER_ACCEPTED_OFFER')}
+                                              ? ' db-pill-approved'
+                                              : ((app.status != null and (app.status.statusCode == 'REJECTED' or app.status.statusCode == 'CUSTOMER_REJECTED_OFFER'))
+                                                  ? ' db-pill-risk'
+                                                  : ' db-pill-needs')"
+                              th:text="${app.status != null ? app.status.label : 'DRAFT'}">
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Applied:</span>
+                        <span class="db-app-value"
+                              th:text="${app.createdAt != null ? #temporals.format(app.createdAt,'yyyy-MM-dd') : '-'}">2024-01-15
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Requested Amount:</span>
+                        <span class="db-app-value"
+                              th:text="'₹' + ${#numbers.formatDecimal(app.amountRequested != null ? app.amountRequested : 0,0,'COMMA',0,'POINT')}">₹5,00,000
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail" th:if="${app.offeredAmount != null}">
+                        <span class="db-app-label">Bank Offered Amount:</span>
+                        <span class="db-app-value"
+                              th:text="'₹' + ${#numbers.formatDecimal(app.offeredAmount,0,'COMMA',0,'POINT')}">₹4,50,000
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Requested Tenure:</span>
+                        <span class="db-app-value"
+                              th:text="${app.tenureMonthsRequested != null ? app.tenureMonthsRequested + ' months' : '-'}">36 months
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail" th:if="${app.offeredTenureMonths != null}">
+                        <span class="db-app-label">Bank Offered Tenure:</span>
+                        <span class="db-app-value"
+                              th:text="${app.offeredTenureMonths + ' months'}">48 months
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail" th:if="${app.offeredInterestRateAnnual != null}">
+                        <span class="db-app-label">Bank Offered Interest:</span>
+                        <span class="db-app-value"
+                              th:text="${app.offeredInterestRateAnnual + '%'}">11.5%
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Purpose:</span>
+                        <span class="db-app-value"
+                              th:text="${app.purpose != null ? app.purpose : '-'}">Home renovation
+                        </span>
+                    </div>
+
+                    <div class="db-app-detail">
+                        <span class="db-app-label">Income:</span>
+                        <span class="db-app-value"
+                              th:text="${app.monthlyIncome != null ? ('₹' + #numbers.formatDecimal(app.monthlyIncome,0,'COMMA',0,'POINT') + '/mo') : '-'}">₹65,000/mo
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="db-card db-card-pad db-mt-18">
+                <h2 class="db-sec-title">Timeline</h2>
+
+                <div class="db-timeline db-mt-14" th:if="${timelineSteps != null and !#lists.isEmpty(timelineSteps)}">
+                    <div class="db-tl-item" th:each="step : ${timelineSteps}">
+                        <div class="db-tl-dot"></div>
+                        <div>
+                            <div class="db-tl-title" th:text="${step.title}">Application submitted</div>
+                            <div class="db-tl-date" th:text="${step.date}">15 Jan 2026</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="db-doc-note" th:if="${timelineSteps == null || #lists.isEmpty(timelineSteps)}">
+                    No timeline available yet.
+                </div>
+            </section>
+        </div>
+
+        <aside>
+            <section class="db-card db-card-pad">
+                <h2 class="db-sec-title">Documents</h2>
+
+                <div class="db-doc-list db-mt-14">
+                    <div class="db-doc-row" th:each="d : ${documents}">
+                        <div class="db-doc-left">
+                            <i class="fa-regular fa-file-lines"></i>
+                            <span th:text="${d.documentType}">PAN</span>
+                        </div>
+
+                        <a class="db-btn db-btn-sm"
+                           th:href="@{'/files/' + ${d.filePath}}"
+                           target="_blank"
+                           style="margin-left:auto;">View</a>
+
+                        <span class="db-doc-pill" th:text="${d.status != null ? d.status : 'UPLOADED'}">Verified</span>
+                    </div>
+
+                    <div class="db-doc-note" th:if="${documents == null || #lists.isEmpty(documents)}">
+                        No documents uploaded yet.
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <section class="db-card" style="margin-top:16px;padding:25px;">
+            <h3 style="margin-bottom:10px;">Application Status</h3>
+
+            <div>
+                <b>Current:</b>
+                <span th:text="${app.status != null ? app.status.label : 'N/A'}">Submitted</span>
+                <small th:if="${app.status != null}" th:text="'(' + app.status.statusCode + ')'"></small>
+            </div>
+
+            <div th:if="${app.officerNotes != null && !#strings.isEmpty(app.officerNotes)}"
+                 style="margin-top:10px;">
+                <b>Officer Notes:</b>
+                <div th:text="${app.officerNotes}" style="margin-top:6px;"></div>
+            </div>
+
+            <div th:if="${app.status != null && app.status.statusCode == 'NEEDS_INFO'}"
+                 style="margin-top:12px; padding:12px; border:1px solid #f5c542; border-radius:10px;">
+                <b>Action Required:</b>
+                <div th:text="${app.needsInfoMessage}" style="margin-top:6px;">
+                    Please upload missing documents.
+                </div>
+
+                <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+                    <a class="db-btn db-btn-sm"
+                       th:href="@{/customer/application/{id}/upload(id=${app.applicationId})}">
+                        Upload Documents
+                    </a>
+
+                    <a class="db-btn db-btn-sm"
+                       th:href="@{/customer/my_applications}">
+                        Back to My Applications
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div th:if="${app.offeredAmount != null}"
+             style="margin-top:12px; padding:16px; border:1px solid #2563eb; border-radius:12px; background:#f8fbff;">
+
+            <b>Loan Offer From Bank</b>
+
+            <div style="margin-top:10px;">
+                You requested:
+                <b th:text="'₹' + ${#numbers.formatDecimal(app.amountRequested != null ? app.amountRequested : 0,0,'COMMA',0,'POINT')}">₹5,00,000</b>
+            </div>
+
+            <div style="margin-top:8px;">
+                Bank offered:
+                <b th:text="'₹' + ${#numbers.formatDecimal(app.offeredAmount != null ? app.offeredAmount : 0,0,'COMMA',0,'POINT')}">₹4,50,000</b>
+            </div>
+
+            <div style="margin-top:8px;">
+                Interest Rate:
+                <b th:text="${app.offeredInterestRateAnnual != null ? app.offeredInterestRateAnnual + '%' : '-'}">11.5%</b>
+            </div>
+
+            <div style="margin-top:8px;">
+                Tenure:
+                <b th:text="${app.offeredTenureMonths != null ? app.offeredTenureMonths + ' months' : '-'}">48 months</b>
+            </div>
+
+            <div th:if="${app.managerNotes != null && !#strings.isEmpty(app.managerNotes)}" style="margin-top:8px;">
+                Notes:
+                <span th:text="${app.managerNotes}">Bank notes</span>
+            </div>
+
+            <div th:if="${app.status != null && app.status.statusCode == 'OFFER_SENT_TO_CUSTOMER'}"
+                 style="margin-top:14px; display:flex; gap:14px; flex-wrap:wrap; align-items:flex-start;">
+
+                <form th:action="@{/customer/application/{id}/accept-offer(id=${app.applicationId})}" method="post">
+                    <button type="submit" class="db-btn db-btn-sm">Accept Offer</button>
+                </form>
+
+                <form th:action="@{/customer/application/{id}/reject-offer(id=${app.applicationId})}" method="post"
+                      style="display:flex; flex-direction:column; gap:8px; min-width:280px;">
+                    <textarea name="rejectReason"
+                              class="db-input"
+                              placeholder="Write reason for rejecting this offer..."
+                              style="min-height:90px; padding:10px; border:1px solid #cbd5e1; border-radius:8px;"
+                              required></textarea>
+
+                    <button type="submit" class="db-btn db-btn-sm" style="background:#dc2626; color:#fff;">
+                        Reject Offer
+                    </button>
+                </form>
+            </div>
+
+            <div th:if="${app.offerStatus == 'REJECTED'}"
+                 style="margin-top:14px; padding:12px; border:1px solid #dc2626; border-radius:10px; background:#fef2f2;">
+                <b>Offer Rejected</b>
+                <div style="margin-top:8px;">
+                    You rejected the bank offer of
+                    <b th:text="'₹' + ${#numbers.formatDecimal(app.offeredAmount != null ? app.offeredAmount : 0,0,'COMMA',0,'POINT')}">₹4,50,000</b>.
+                </div>
+
+                <div th:if="${app.offerRejectionReason != null && !#strings.isEmpty(app.offerRejectionReason)}"
+                     style="margin-top:8px;">
+                    <b>Your Reason:</b>
+                    <span th:text="${app.offerRejectionReason}">Interest rate is high</span>
+                </div>
+            </div>
+
+            <div th:if="${app.offerStatus == 'ACCEPTED' or (app.status != null and app.status.statusCode == 'APPROVED')}"
+                 style="margin-top:14px; padding:12px; border:1px solid #16a34a; border-radius:10px; background:#f0fdf4;">
+                <b>Offer Accepted</b>
+                <div style="margin-top:8px;">
+                    You accepted the bank offer of
+                    <b th:text="'₹' + ${#numbers.formatDecimal(app.offeredAmount != null ? app.offeredAmount : 0,0,'COMMA',0,'POINT')}">₹4,50,000</b>
+                    at
+                    <b th:text="${app.offeredInterestRateAnnual != null ? app.offeredInterestRateAnnual + '%' : '-'}">11.5%</b>
+                    for
+                    <b th:text="${app.offeredTenureMonths != null ? app.offeredTenureMonths + ' months' : '-'}">48 months</b>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/customer_dashboard.js}"></script>
+</body>
+</html>

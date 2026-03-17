@@ -1,0 +1,749 @@
+/* =========================
+   Dashboard Theme (NO CONFLICT)
+   Prefix: db-
+   ========================= */
+
+:root{
+  --db-navy:#1f3d63;
+  --db-navyDeep:#183456;
+  --db-bg:#f5f6f8;
+  --db-card:#ffffff;
+  --db-border:#d8dee8;
+  --db-text:#0f172a;
+  --db-muted:#6b7280;
+  --db-yellow:#f4b400;
+  --db-green:#16a34a;
+  --db-blue:#3b82f6;
+  --db-orange:#f59e0b;
+  --db-shadow:0 10px 20px rgba(15,23,42,.06);
+}
+
+.db-page{
+  background: var(--db-bg);
+  min-height: 100vh;
+}
+
+/* ===== HERO ===== */
+.db-hero{
+  background: linear-gradient(135deg, var(--db-navyDeep), var(--db-navy));
+  color:#fff;
+  padding: 34px 0 34px; /* bigger cover */
+}
+
+.db-hero .db-hero-inner{
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 8px 0px 0; /* content slightly down */
+}
+
+.db-hero-title{
+  margin:0;
+  font-size: 36px;      /* bigger */
+  font-weight: 500;
+  letter-spacing: -.2px;
+  line-height: 1.12;
+}
+
+.db-hero-sub{
+  margin:10px 0 0;
+  font-size: 15px;      /* bigger */
+  font-weight: 300;
+  opacity: .92;
+  line-height: 1.55;
+}
+
+/* ===== WRAP ===== */
+.db-wrap{
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 30px 18px 18px; /* cards more down */
+}
+
+.db-card{
+  background: var(--db-card);
+  border: 1px solid var(--db-border);
+  border-radius: 10px;
+  box-shadow: var(--db-shadow);
+}
+
+.db-card-pad{
+  padding: 18px; /* slightly more */
+}
+
+.db-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+}
+
+.db-gap-12{gap:12px}
+.db-mt-14{margin-top:14px}
+.db-mt-18{margin-top:18px}
+.db-mt-24{margin-top:30px} /* more spacing */
+
+/* ===== Buttons ===== */
+.db-btn{
+  border: 1px solid var(--db-border);
+  background:#fff;
+  color: var(--db-text);
+  border-radius: 7px;
+  padding: 9px 13px;       /* bigger */
+  font-size: 13px;         /* bigger */
+  font-weight: 400;
+  cursor:pointer;
+  transition:.15s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.db-btn:hover{background:#f8fafc}
+.db-btn:active{transform: translateY(1px)}
+
+.db-btn-yellow{
+  background: var(--db-yellow);
+  border-color: var(--db-yellow);
+  color:#111827;
+}
+.db-btn-yellow:hover{filter:brightness(1.02)}
+
+.db-btn-disabled{
+  opacity:.55;
+  pointer-events:none;
+}
+
+.db-btn-sm{
+  padding: 8px 11px;
+  font-size: 12px;
+  border-radius: 7px;
+}
+
+/* ===== KPI Cards ===== */
+.db-kpi-grid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: -10px; /* cards thoda niche */
+}
+
+.db-kpi{
+  background:#fff;
+  border:1px solid var(--db-border);
+  border-radius: 10px;
+  box-shadow: var(--db-shadow);
+  padding: 16px; /* bigger */
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.db-kpi-left small{
+  display:block;
+  color: var(--db-muted);
+  font-size: 12px;  /* bigger */
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.db-kpi-left .db-kpi-num{
+  font-size: 24px;  /* bigger */
+  font-weight: 800;
+  color: var(--db-text);
+  line-height: 1.05;
+}
+
+.db-kpi-left .db-kpi-sub{
+  font-size: 12px;
+  color: var(--db-muted);
+  margin-top: 6px;
+}
+
+.db-kpi-ico{
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background:#eef2f7;
+  border: 1px solid #e5e7eb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#0f172a;
+}
+
+/* ===== Section Head ===== */
+.db-sec-title{
+  margin: 0;
+  font-size: 16px; /* bigger */
+  font-weight: 800;
+  color: var(--db-text);
+}
+.db-sec-sub{
+  margin: 6px 0 0;
+  font-size: 13px; /* bigger */
+  color: var(--db-muted);
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+/* ===== Table ===== */
+.db-table{
+  width:100%;
+  border-collapse: collapse;
+  font-size: 13px; /* bigger */
+}
+
+.db-table thead th{
+  text-align:left;
+  padding: 12px 12px; /* bigger */
+  font-size: 12px;    /* bigger */
+  color: #64748b;
+  font-weight: 700;
+  border-bottom: 1px solid #e5e7eb;
+  background:#f8fafc;
+}
+
+.db-table tbody td{
+  padding: 13px 12px;  /* bigger */
+  border-bottom: 1px solid #eef2f7;
+  color:#0f172a;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.db-table tbody tr:last-child td{border-bottom:0}
+
+/* Status pills */
+.db-pill{
+  display:inline-flex;
+  align-items:center;
+  padding: 4px 11px;     /* bigger */
+  border-radius: 999px;
+  font-size: 11px;       /* bigger */
+  font-weight: 700;
+  border:1px solid transparent;
+  line-height: 1.2;
+}
+
+.db-pill-approved{background: rgba(22,163,74,.12); color: #15803d; border-color: rgba(22,163,74,.35);}
+.db-pill-risk{background: rgba(59,130,246,.12); color:#2563eb; border-color: rgba(59,130,246,.35);}
+.db-pill-needs{background: rgba(245,158,11,.14); color:#b45309; border-color: rgba(245,158,11,.35);}
+.db-pill-submitted{background: rgba(99,102,241,.12); color:#4f46e5; border-color: rgba(99,102,241,.35);}
+.db-pill-disbursed{background: rgba(16,185,129,.12); color:#047857; border-color: rgba(16,185,129,.35);}
+.db-pill-recommended{background: rgba(34,197,94,.12); color:#15803d; border-color: rgba(34,197,94,.35);}
+
+/* ===== Quick Actions ===== */
+.db-quick-grid{
+  margin-top: 14px;
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.db-quick{
+  padding: 16px; /* bigger */
+  text-align:center;
+  border-radius: 10px;
+  border:1px solid var(--db-border);
+  background:#fff;
+  box-shadow: var(--db-shadow);
+  transition:.12s ease;
+}
+
+.db-quick .db-quick-ico{
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background:#eef2f7;
+  border:1px solid #e5e7eb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin: 0 auto 10px;
+}
+
+.db-quick .db-quick-title{
+  font-size: 13px; /* bigger */
+  font-weight: 600;
+  color:#0f172a;
+}
+
+.db-quick:hover{background:#fbfdff; transform: translateY(-1px);}
+
+/* ===== My Loans List ===== */
+.db-loan-item{
+  padding: 16px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  border-bottom:1px solid #eef2f7;
+}
+.db-loan-item:last-child{border-bottom:0}
+
+.db-loan-left .db-loan-top{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.db-loan-id{
+  font-weight: 800;
+  font-size: 13px;
+}
+.db-loan-sub{
+  font-size: 12px;
+  color: var(--db-muted);
+  line-height: 1.45;
+}
+
+/* ===== Forms ===== */
+.db-form-grid-2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.db-field label{
+  display:block;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 7px;
+  color:#0f172a;
+}
+
+.db-input, .db-select, .db-textarea{
+  width:100%;
+  border: 1px solid var(--db-border);
+  background:#f8fafc;
+  border-radius: 7px;
+  padding: 11px 11px;
+  font-size: 13px; /* bigger */
+  outline:none;
+  font-weight: 500;
+}
+
+.db-textarea{min-height: 82px; resize:none}
+
+.db-input:focus, .db-select:focus, .db-textarea:focus{
+  box-shadow: 0 0 0 3px rgba(244,180,0,.16);
+  border-color: rgba(244,180,0,.35);
+}
+
+/* ===== Apply Steps ===== */
+.db-stepbar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 18px;
+  padding: 16px 0 0;
+}
+
+.db-step{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  color:#334155;
+  font-size: 13px; /* bigger */
+  font-weight: 500;
+}
+.db-step .db-step-dot{
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border: 1px solid #cbd5e1;
+  background:#e2e8f0;
+  color:#0f172a;
+  font-size: 11px;
+}
+
+.db-step.active{color:#0f172a}
+.db-step.active .db-step-dot{
+  border-color:#0f172a;
+  background:#0f172a;
+  color:#fff;
+}
+
+.db-step-line{
+  width: 56px;
+  height: 2px;
+  background:#0f172a;
+  opacity:.9;
+}
+
+.db-step-line.muted{
+  background:#e2e8f0;
+  opacity:1;
+}
+
+.db-form-actions{
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e5e7eb;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* ===== Upload list ===== */
+.db-upload-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  padding: 11px 11px;
+  border: 1px solid #e5e7eb;
+  background:#fff;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+.db-upload-row small{
+  display:block;
+  color:#64748b;
+  font-weight: 600;
+  font-size: 11px;
+  margin-top: 4px;
+}
+.db-upload-note{
+  margin-top: 10px;
+  font-size: 11px;
+  color:#64748b;
+  font-weight: 600;
+}
+
+/* ===== Dashboard user dropdown (top-right) ===== */
+.db-user{
+  position: relative;
+}
+
+.db-user-btn{
+  border: 1px solid #d8dee8;
+  background:#f8fafc;
+  color:#0f172a;
+  border-radius: 7px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+}
+.db-user-btn:hover{
+  background:#eef2f7;
+}
+
+.db-user-menu{
+  position:absolute;
+  right:0;
+  top: 44px;
+  width: 190px;
+  background:#fff;
+  border:1px solid #d8dee8;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(15,23,42,.08);
+  padding: 8px;
+  display:none;
+  z-index: 60;
+}
+
+.db-user.open .db-user-menu{display:block}
+
+.db-user-menu a{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color:#0f172a;
+}
+.db-user-menu a:hover{background:#f3f4f6}
+
+/* =========================
+   2 NEW PAGES SUPPORT
+   Application Details + EMI Schedule
+   ========================= */
+
+/* ---- Application Details layout ---- */
+.db-app-grid{
+  display:grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  margin-top: -10px; /* same feel as dashboard */
+}
+
+/* Details list in card */
+.db-app-detail-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 18px;
+}
+.db-app-detail{
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  font-size: 13px;
+}
+.db-app-label{
+  color: var(--db-muted);
+  font-weight: 600;
+  min-width: 70px;
+}
+.db-app-value{
+  color: var(--db-text);
+  font-weight: 500;
+}
+
+/* ---- Timeline ---- */
+.db-timeline{
+  padding-left: 6px;
+}
+.db-tl-item{
+  display:flex;
+  gap: 12px;
+  padding: 10px 0;
+  position:relative;
+}
+.db-tl-item::before{
+  content:"";
+  position:absolute;
+  left: 7px;
+  top: 26px;
+  bottom: -10px;
+  width:2px;
+  background:#e2e8f0;
+}
+.db-tl-item:last-child::before{display:none}
+.db-tl-dot{
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background:#0f172a;
+  border: 3px solid #dbeafe;
+  margin-top: 2px;
+  flex:0 0 auto;
+}
+.db-tl-title{
+  font-size: 13px;
+  font-weight: 500;
+  color:#0f172a;
+}
+.db-tl-date{
+  font-size: 12px;
+  color:#64748b;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* ---- Documents card ---- */
+.db-doc-list{display:flex; flex-direction:column; gap: 10px;}
+.db-doc-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  padding: 10px 10px;
+  border:1px solid #eef2f7;
+  border-radius: 8px;
+  background:#fff;
+}
+.db-doc-left{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  color:#0f172a;
+  font-weight: 500;
+  font-size: 13px;
+}
+.db-doc-left i{color:#64748b}
+.db-doc-pill{
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(22,163,74,.12);
+  border: 1px solid rgba(22,163,74,.35);
+  color:#15803d;
+}
+.db-doc-upload{
+  width:100%;
+  justify-content:center;
+}
+.db-doc-note{
+  margin-top: 10px;
+  font-size: 11px;
+  color:#64748b;
+  font-weight: 600;
+}
+
+/* ---- EMI Schedule scroll table ---- */
+.db-emi-table-wrap{
+  max-height: 520px;
+  overflow:auto;
+  border:1px solid #eef2f7;
+  border-radius: 10px;
+}
+.db-emi-table-wrap .db-table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* =========================
+   RESPONSIVE (Improved)
+   ========================= */
+
+@media (max-width:1100px){
+  .db-kpi-grid{
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: -8px;
+  }
+  .db-quick-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .db-hero-title{font-size: 34px;}
+
+  /* 2 pages */
+  .db-app-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width:720px){
+  .db-hero{padding: 58px 0 68px;}
+  .db-hero-title{font-size: 30px;}
+  .db-hero-sub{font-size: 14px;}
+
+  .db-wrap{padding: 26px 14px 18px;}
+  .db-card-pad{padding: 16px;}
+
+  .db-form-grid-2{grid-template-columns: 1fr;}
+  .db-step-line{width: 30px;}
+
+  /* tables scroll in mobile */
+  .db-card{overflow:hidden;}
+  .db-table{
+    display:block;
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .db-app-detail-grid{grid-template-columns: 1fr;}
+  .db-emi-table-wrap{max-height: 460px;}
+}
+
+@media (max-width:420px){
+  .db-hero-title{font-size: 28px;}
+  .db-kpi-grid{grid-template-columns: 1fr;}
+  .db-quick-grid{grid-template-columns: 1fr;}
+}
+
+
+
+
+.success-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.success-box {
+    background: #ffffff;
+    padding: 40px 50px;
+    border-radius: 20px;
+    text-align: center;
+    animation: scaleIn .4s ease;
+}
+
+.success-icon {
+    font-size: 70px;
+    color: #16a34a;
+    margin-bottom: 15px;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+
+
+
+.badge-success{
+    background:#dcfce7;
+    color:#166534;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.badge-warning{
+    background:#fef3c7;
+    color:#92400e;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+}
+
+
+.db-err{
+  display:block;
+  margin-top:6px;
+  font-size:12px;
+  font-weight:600;
+  color:#dc2626;
+}
+
+.db-input-error,
+.db-select-error,
+.db-textarea-error{
+  border:1px solid #dc2626 !important;
+  box-shadow:0 0 0 2px rgba(220,38,38,.08);
+}
+
+
+
+.adm-form-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    margin-top: 10px;
+}
+
+.adm-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.adm-field label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.adm-input,
+.adm-select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+.adm-form-actions{
+    margin-top:20px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: navbarSection}"></div>
+
+
+
+<section class="hero">
+    <div class="container hero-inner">
+        <h1 class="hero-title">EMI Calculator</h1>
+        <p class="hero-sub">Plan your loan repayment with our easy calculator</p>
+    </div>
+</section>
+
+<section class="section" style="background: var(--bg);">
+    <div class="container">
+
+        <div class="emi-page-grid">
+
+            <!-- LEFT CARD -->
+            <div class="emi-card">
+                <div class="emi-field">
+                    <div class="emi-label-row">
+                        <label>Loan Amount</label>
+                        <span class="emi-value" id="loanAmountLabel">₹5,00,000</span>
+                    </div>
+
+                    <!-- keep id SAME so your old js works -->
+                    <input id="loanAmount" class="emi-range" type="range" min="50000" max="5000000" step="10000" value="500000">
+                    <input id="loanAmountInput" class="emi-input" type="number" min="50000" max="5000000" step="10000" value="500000">
+                </div>
+
+                <div class="emi-field">
+                    <div class="emi-label-row">
+                        <label>Interest Rate (% p.a.)</label>
+                        <span class="emi-value"><span id="interestRateLabel">10.5</span>%</span>
+                    </div>
+
+                    <input id="interestRate" class="emi-range" type="range" min="1" max="30" step="0.1" value="10.5">
+                    <input id="interestRateInput" class="emi-input" type="number" min="1" max="30" step="0.1" value="10.5">
+                </div>
+
+                <div class="emi-field">
+                    <div class="emi-label-row">
+                        <label>Tenure (months)</label>
+                        <span class="emi-value"><span id="tenureLabel">36</span> months</span>
+                    </div>
+
+                    <input id="tenureMonths" class="emi-range" type="range" min="6" max="360" step="1" value="36">
+                    <input id="tenureMonthsInput" class="emi-input" type="number" min="6" max="360" step="1" value="36">
+                </div>
+            </div>
+
+            <!-- RIGHT CARD -->
+            <div class="emi-card">
+                <div class="emi-right-top">
+                    <div class="emi-right-small">Monthly EMI</div>
+
+                    <!-- keep id SAME so your old js works -->
+                    <div class="emi-right-big" id="emiBig">₹16,251</div>
+                </div>
+
+                <div class="emi-kpi-row">
+                    <div class="emi-kpi">
+                        <div class="kpi-label">Total Amount</div>
+                        <div class="kpi-value" id="totalAmount">₹0</div>
+                    </div>
+
+                    <div class="emi-kpi">
+                        <div class="kpi-label">Total Interest</div>
+                        <div class="kpi-value" id="totalInterest">₹0</div>
+                    </div>
+                </div>
+
+                <div class="emi-chart-wrap">
+                    <canvas id="pieCanvas" width="260" height="260"></canvas>
+                    <div class="emi-legend">
+                        <div class="lg"><span class="dot navy"></span> Principal</div>
+                        <div class="lg"><span class="dot yellow"></span> Interest</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- EMI Schedule Table -->
+        <div class="emi-table-block">
+            <div class="emi-table-head">
+                <span class="emi-chip">EMI Schedule</span>
+            </div>
+
+            <div class="emi-table-wrap">
+                <table class="emi-table">
+                    <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>EMI</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Balance</th>
+                    </tr>
+                    </thead>
+                    <tbody id="emiTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ✅ FOOTER (your bug is here: missing quote + bracket) -->
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<!-- ✅ JS should be at end -->
+<script th:src="@{/js/loanhub.js}"></script>
+</body>
+</html>

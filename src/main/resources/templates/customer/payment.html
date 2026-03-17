@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - EMI Payment</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/customer_dashboard.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/customerNavbarSection :: customerNavbarSection}"></div>
+
+<section class="db-hero">
+    <div class="db-hero-inner">
+        <h1 class="db-hero-title">Pay EMI</h1>
+        <p class="db-hero-sub"
+           th:text="${'Installment #' + emi.installmentNo + ' • ₹' + #numbers.formatDecimal(emi.emiAmount, 0, 'COMMA', 2, 'POINT')}">
+            Installment #1 • ₹16,000.00
+        </p>
+    </div>
+</section>
+
+<main class="db-wrap">
+    <section class="db-card db-card-pad" style="max-width:760px; margin:0 auto;">
+
+        <div class="db-row">
+            <div>
+                <h2 class="db-sec-title">Dummy Payment Gateway</h2>
+                <p class="db-sec-sub">Select method and fill details</p>
+            </div>
+
+            <a class="db-btn db-btn-sm"
+               th:href="@{/customer/emi_schedule/{id}(id=${emi.loanAccount.application.applicationId})}">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <div class="db-mt-14" style="padding:16px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
+            <div><strong>Loan Account:</strong> <span th:text="${emi.loanAccount.accountNo}">LN-0001</span></div>
+            <div style="margin-top:8px;"><strong>Due Date:</strong> <span th:text="${emi.dueDate}">2026-04-06</span></div>
+            <div style="margin-top:8px;"><strong>EMI Amount:</strong>
+                <span th:text="${'₹' + #numbers.formatDecimal(emi.emiAmount, 0, 'COMMA', 2, 'POINT')}">₹16,000.00</span>
+            </div>
+        </div>
+
+        <form th:action="@{/customer/emi/pay/{emiId}(emiId=${emi.emiId})}" method="post" class="db-mt-14" id="paymentForm">
+
+            <label class="db-label" for="paymentMethod">Payment Method</label>
+            <select class="db-input" id="paymentMethod" name="paymentMethod" required>
+                <option value="">Select Payment Method</option>
+                <option value="UPI">UPI</option>
+                <option value="CREDIT_CARD">Credit Card</option>
+                <option value="DEBIT_CARD">Debit Card</option>
+            </select>
+
+            <!-- UPI -->
+            <div id="upiSection" style="display:none;">
+                <label class="db-label" for="upiId">UPI ID</label>
+                <input class="db-input" type="text" id="upiId" name="upiId" placeholder="example@upi">
+                <small style="color:#64748b;">Example: raiyan@oksbi</small>
+            </div>
+
+            <!-- Card -->
+            <div id="cardSection" style="display:none;">
+                <label class="db-label" for="cardHolderName">Card Holder Name</label>
+                <input class="db-input" type="text" id="cardHolderName" name="cardHolderName" placeholder="Raiyan Nodoliya">
+
+                <label class="db-label" for="cardNumber">Card Number</label>
+                <input class="db-input" type="text" id="cardNumber" name="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456">
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <label class="db-label" for="expiry">Expiry (MM/YY)</label>
+                        <input class="db-input" type="text" id="expiry" name="expiry" maxlength="5" placeholder="08/28">
+                    </div>
+                    <div>
+                        <label class="db-label" for="cvv">CVV</label>
+                        <input class="db-input" type="password" id="cvv" name="cvv" maxlength="3" placeholder="123">
+                    </div>
+                </div>
+            </div>
+
+            <div class="db-mt-14" style="display:flex; gap:10px;">
+                <button type="submit" class="db-btn">
+                    <i class="fa-solid fa-credit-card"></i> Pay Now
+                </button>
+                <a class="db-btn db-btn-sm"
+                   th:href="@{/customer/emi_schedule/{id}(id=${emi.loanAccount.application.applicationId})}">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+
+<script>
+    const paymentMethod = document.getElementById('paymentMethod');
+    const upiSection = document.getElementById('upiSection');
+    const cardSection = document.getElementById('cardSection');
+
+    const upiId = document.getElementById('upiId');
+    const cardHolderName = document.getElementById('cardHolderName');
+    const cardNumber = document.getElementById('cardNumber');
+    const expiry = document.getElementById('expiry');
+    const cvv = document.getElementById('cvv');
+
+    function togglePaymentFields() {
+        const method = paymentMethod.value;
+
+        upiSection.style.display = method === 'UPI' ? 'block' : 'none';
+        cardSection.style.display = (method === 'CREDIT_CARD' || method === 'DEBIT_CARD') ? 'block' : 'none';
+
+        upiId.required = method === 'UPI';
+        cardHolderName.required = (method === 'CREDIT_CARD' || method === 'DEBIT_CARD');
+        cardNumber.required = (method === 'CREDIT_CARD' || method === 'DEBIT_CARD');
+        expiry.required = (method === 'CREDIT_CARD' || method === 'DEBIT_CARD');
+        cvv.required = (method === 'CREDIT_CARD' || method === 'DEBIT_CARD');
+    }
+
+    paymentMethod.addEventListener('change', togglePaymentFields);
+    togglePaymentFields();
+
+    cardNumber.addEventListener('input', function () {
+        let value = this.value.replace(/\D/g, '').substring(0, 16);
+        value = value.replace(/(.{4})/g, '$1 ').trim();
+        this.value = value;
+    });
+
+    expiry.addEventListener('input', function () {
+        let value = this.value.replace(/\D/g, '').substring(0, 4);
+        if (value.length >= 3) {
+            value = value.substring(0, 2) + '/' + value.substring(2);
+        }
+        this.value = value;
+    });
+
+    cvv.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '').substring(0, 3);
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', function (e) {
+        const method = paymentMethod.value;
+
+        if (method === 'UPI') {
+            const upiPattern = /^[a-zA-Z0-9._-]{2,}@[a-zA-Z]{2,}$/;
+            if (!upiPattern.test(upiId.value.trim())) {
+                alert('Please enter valid UPI ID');
+                e.preventDefault();
+                return;
+            }
+        }
+
+        if (method === 'CREDIT_CARD' || method === 'DEBIT_CARD') {
+            const cleanCard = cardNumber.value.replace(/\s/g, '');
+            if (!/^\d{16}$/.test(cleanCard)) {
+                alert('Card number must be 16 digits');
+                e.preventDefault();
+                return;
+            }
+
+            if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry.value.trim())) {
+                alert('Expiry must be in MM/YY format');
+                e.preventDefault();
+                return;
+            }
+
+            if (!/^\d{3}$/.test(cvv.value.trim())) {
+                alert('CVV must be 3 digits');
+                e.preventDefault();
+                return;
+            }
+
+            if (cardHolderName.value.trim() === '') {
+                alert('Please enter card holder name');
+                e.preventDefault();
+            }
+        }
+    });
+</script>
+</body>
+</html>

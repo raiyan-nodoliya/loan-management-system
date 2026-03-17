@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/customer_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/customerNavbarSection :: customerNavbarSection}"></div>
+
+<section class="db-hero">
+    <div class="db-hero-inner">
+        <h1 class="db-hero-title">Apply for Loan</h1>
+        <p class="db-hero-sub">Step 4 of 4: Documents & Submit</p>
+    </div>
+</section>
+
+<div class="db-wrap">
+
+    <div class="db-stepbar">
+        <div class="db-step"><span class="db-step-dot">1</span> Personal Details</div>
+        <div class="db-step-line"></div>
+        <div class="db-step"><span class="db-step-dot">2</span> Loan Details</div>
+        <div class="db-step-line"></div>
+        <div class="db-step"><span class="db-step-dot">3</span> Income & Employment</div>
+        <div class="db-step-line"></div>
+        <div class="db-step active"><span class="db-step-dot">4</span> Documents & Submit</div>
+    </div>
+
+    <div class="db-card db-card-pad" style="max-width: 520px; margin: 12px auto 0;">
+        <form th:action="@{/apply/step4_documents}" method="post" enctype="multipart/form-data">
+
+            <div class="db-upload-row">
+                <div><div style="font-size:11px;font-weight:500;">PAN Card</div></div>
+                <input type="file" name="panFile" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <small class="db-err" th:if="${panFileError}" th:text="${panFileError}"></small>
+
+            <div class="db-upload-row">
+                <div><div style="font-size:11px;font-weight:500;">Aadhaar Card</div></div>
+                <input type="file" name="aadhaarFile" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <small class="db-err" th:if="${aadhaarFileError}" th:text="${aadhaarFileError}"></small>
+
+            <div class="db-upload-row">
+                <div><div style="font-size:11px;font-weight:500;">Income Proof / Salary Slips</div></div>
+                <input type="file" name="incomeProofFile" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <small class="db-err" th:if="${incomeProofFileError}" th:text="${incomeProofFileError}"></small>
+
+            <div class="db-upload-row">
+                <div><div style="font-size:11px;font-weight:500;">Bank Statements (last 6 months)</div></div>
+                <input type="file" name="bankStmtFile" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <small class="db-err" th:if="${bankStmtFileError}" th:text="${bankStmtFileError}"></small>
+
+            <div class="db-upload-row">
+                <div><div style="font-size:11px;font-weight:500;">Address Proof</div></div>
+                <input type="file" name="addressProofFile" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <small class="db-err" th:if="${addressProofFileError}" th:text="${addressProofFileError}"></small>
+
+            <div class="db-upload-note">Accepted formats: PDF, JPG, PNG (max 5MB each)</div>
+
+            <div class="db-form-actions">
+                <a class="db-btn" th:href="@{/apply/step3_income}">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </a>
+                <button class="db-btn db-btn-yellow" type="submit">
+                    Submit Application <i class="fa-regular fa-circle-check"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ✅ FOOTER (your bug is here: missing quote + bracket) -->
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<!-- ✅ JS should be at end -->
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/customer_dashboard.js}"></script>
+</body>
+</html>

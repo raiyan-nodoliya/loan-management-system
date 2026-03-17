@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: navbarSection}"></div>
+
+<section class="hero-head" id="home">
+    <div class="container hero-inner">
+        <h1 class="hero-title">
+            Your Trusted Partner for<br/>
+            Every <span class="hl">Financial</span> Need
+        </h1>
+
+        <p class="hero-sub">
+            Get competitive interest rates, quick approvals, and hassle-free processing for
+            personal, home, education, and vehicle loans.
+        </p>
+
+        <div class="hero-actions">
+            <a class="btn btn-primary" th:href="@{/customer_login}">
+                Apply Now <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+            <a class="btn btn-ghost" th:href="@{/contact}">
+                Contact Us
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section tools" id="emi">
+    <div class="container">
+        <div class="sec-head">
+            <h2>Quick Tools</h2>
+            <p>Calculate EMI or track your application instantly</p>
+        </div>
+
+        <div class="tool-card">
+            <div class="tool-tabs" role="tablist">
+                <button class="tool-tab active" data-tab="pane-emi" type="button">
+                    <i class="fa-solid fa-calculator"></i> EMI Calculator
+                </button>
+                <button class="tool-tab" data-tab="pane-track" type="button" id="track">
+                    <i class="fa-solid fa-magnifying-glass"></i> Track Application
+                </button>
+            </div>
+
+            <div class="tool-body">
+                <div class="tool-pane active" id="pane-emi" role="tabpanel">
+                    <div class="tool-grid">
+                        <div class="field">
+                            <label>Loan Amount (₹)</label>
+                            <input id="loanAmount" type="number" value="500000" />
+                        </div>
+
+                        <div class="field">
+                            <label>Interest Rate (%)</label>
+                            <input id="interestRate" type="number" value="10.5" step="0.1" />
+                        </div>
+
+                        <div class="field">
+                            <label>Tenure (months)</label>
+                            <input id="tenureMonths" type="number" value="36" />
+                        </div>
+                    </div>
+
+                    <div class="tool-result">
+                        <div class="result-left">
+                            <div class="mini">Monthly EMI</div>
+                            <div class="emi-big" id="emiBig">₹16,251</div>
+                        </div>
+
+                        <a class="btn btn-small" th:href="@{/emi_calculator}">
+                            Full Calculator <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="tool-pane" id="pane-track" role="tabpanel">
+
+                    <div class="track-container">
+                        <a th:href="@{/customer/track}" class="track-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Track Application
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section products" id="products">
+    <div class="container">
+        <div class="sec-head">
+            <h2>Our Loan Products</h2>
+            <p>Choose the right loan for your needs</p>
+        </div>
+
+        <div class="grid-4">
+
+            <article class="p-card" th:if="${loanTypes == null or #lists.isEmpty(loanTypes)}">
+                <div class="p-icon"><i class="fa-solid fa-circle-info"></i></div>
+                <h3>No Loan Products</h3>
+                <p>Loan products are not available right now.</p>
+            </article>
+
+            <th:block th:if="${loanTypes != null and !#lists.isEmpty(loanTypes)}"
+                      th:each="x : ${loanTypes}">
+                <article class="p-card">
+                    <div class="p-icon">
+                        <i th:class="${x.loanTypeCode == 'PERSONAL' ? 'fa-regular fa-user' :
+                              (x.loanTypeCode == 'HOME' ? 'fa-solid fa-house' :
+                              (x.loanTypeCode == 'EDUCATION' ? 'fa-solid fa-graduation-cap' :
+                              (x.loanTypeCode == 'VEHICLE' ? 'fa-solid fa-car-side' : 'fa-solid fa-money-bill')))}"></i>
+                    </div>
+
+                    <h3 th:text="${x.loanTypeName}">Personal Loan</h3>
+
+                    <p th:text="${x.description != null and !#strings.isEmpty(x.description) ? x.description : 'Flexible loan solution for your needs.'}">
+                        Quick funds for your personal needs.
+                    </p>
+
+                    <div class="p-meta">
+                        <div>
+                            <div class="k">Starting rate</div>
+                            <div class="v"
+                                 th:text="${x.interestRateMin != null ? x.interestRateMin + '% p.a.' : 'N/A'}">
+                                10.5% p.a.
+                            </div>
+                        </div>
+
+                        <div class="right">
+                            <div class="k">Max amount</div>
+                            <div class="v"
+                                 th:text="${x.maxAmount != null ? '₹' + #numbers.formatDecimal(x.maxAmount, 0, 'COMMA', 0, 'POINT') : 'N/A'}">
+                                ₹25,00,000
+                            </div>
+                        </div>
+                    </div>
+
+                    <a class="learn" th:href="@{/customer_login}">
+                        Learn More <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </article>
+            </th:block>
+
+        </div>
+    </div>
+</section>
+
+<section class="section why">
+    <div class="container">
+        <div class="sec-head">
+            <h2>Why Choose LoanHub?</h2>
+            <p></p>
+        </div>
+
+        <div class="grid-4 why-grid">
+            <div class="w-card">
+                <div class="w-ico"><i class="fa-regular fa-clock"></i></div>
+                <h4>Fast Processing</h4>
+                <p>Get loan approval within 24–48 hours with minimal paperwork</p>
+            </div>
+
+            <div class="w-card secure">
+                <div class="w-ico"><i class="fa-solid fa-shield-halved"></i></div>
+                <h4>Secure & Trusted</h4>
+                <p>Bank-grade security for all your data and transactions</p>
+            </div>
+
+            <div class="w-card">
+                <div class="w-ico"><i class="fa-regular fa-file-lines"></i></div>
+                <h4>Easy Documentation</h4>
+                <p>Simple document upload and digital verification process</p>
+            </div>
+
+            <div class="w-card">
+                <div class="w-ico"><i class="fa-regular fa-handshake"></i></div>
+                <h4>Expert Support</h4>
+                <p>Dedicated relationship managers to guide you through</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section docs" id="documents">
+    <div class="container">
+        <div class="sec-head">
+            <h2>Documents Required</h2>
+            <p>Basic documents needed for loan application</p>
+        </div>
+
+        <div class="doc-box">
+            <div class="doc-grid">
+                <div class="doc-item"><i class="fa-regular fa-circle-check"></i> PAN Card</div>
+                <div class="doc-item"><i class="fa-regular fa-circle-check"></i> Aadhaar Card</div>
+                <div class="doc-item"><i class="fa-regular fa-circle-check"></i> Income / Salary Proof</div>
+                <div class="doc-item"><i class="fa-regular fa-circle-check"></i> Bank Statements (6 months)</div>
+                <div class="doc-item"><i class="fa-regular fa-circle-check"></i> Address Proof</div>
+                <div class="doc-item"><i class="fa-regular fa-circle-check"></i> Passport-size Photos</div>
+            </div>
+
+            <div class="doc-foot">
+                Additional documents may be required based on loan type.
+                <a th:href="@{/documents}">View loan-specific documents →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section faq" id="faq">
+    <div class="container">
+        <div class="sec-head">
+            <h2>Frequently Asked Questions</h2>
+            <p></p>
+        </div>
+
+        <div class="faq-box" data-accordion>
+            <div class="faq-item">
+                <button class="faq-q" type="button">
+                    How do I apply for a loan?
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-a">Click “Apply Now”, login/register and submit the application with documents.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" type="button">
+                    What documents are required?
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-a">PAN, Aadhaar, income proof, address proof and bank statements.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" type="button">
+                    How long does loan approval take?
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-a">Typically 24–48 hours after verification depending on loan type.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" type="button">
+                    Can I track my application status?
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-a">Yes, use Track Application with your application number.</div>
+            </div>
+
+            <a class="btn btn-outline center" th:href="@{/faq_sqaure}">
+                View All FAQs <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!-- admin/loan_application_statuses.html -->
+
+<div th:fragment="pageContent">
+
+    <section class="adm-topbar">
+        <div class="adm-topbar-row">
+            <div>
+                <h1 class="adm-h-title">Loan Application Statuses</h1>
+                <p class="adm-h-sub">Create master statuses + enable/disable</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flash messages -->
+    <div class="adm-mt-12" th:if="${success}">
+        <div class="adm-alert adm-alert-success" th:text="${success}"></div>
+    </div>
+
+    <div class="adm-mt-12" th:if="${error}">
+        <div class="adm-alert adm-alert-danger" th:text="${error}"></div>
+    </div>
+
+    <!-- Create Status -->
+    <section class="adm-card adm-card-pad adm-mt-16">
+        <div class="adm-sec-head">
+            <div>
+                <h3>Create Status</h3>
+                <p>Example: DRAFT / SUBMITTED / IN_REVIEW</p>
+            </div>
+        </div>
+
+        <form th:action="@{/admin/settings/loan-application-statuses}" method="post">
+            <div class="adm-field">
+                <label>Status Code *</label>
+                <input class="adm-input"
+                       type="text"
+                       name="statusCode"
+                       maxlength="50"
+                       pattern="[A-Za-z0-9_ ]+"
+                       placeholder="e.g. IN_REVIEW"
+                       required/>
+            </div>
+
+            <div class="adm-field">
+                <label>Label *</label>
+                <input class="adm-input"
+                       type="text"
+                       name="label"
+                       maxlength="100"
+                       placeholder="e.g. In Review"
+                       required/>
+            </div>
+
+            <div class="adm-form-actions">
+                <button type="reset" class="adm-btn">Reset</button>
+                <button type="submit" class="adm-btn adm-btn-yellow">Create Status</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Existing Statuses -->
+    <section class="adm-card adm-card-pad adm-mt-16">
+        <div class="adm-sec-head">
+            <div>
+                <h3>Existing Statuses</h3>
+            </div>
+        </div>
+
+        <table class="adm-table adm-mt-12">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Code</th>
+                <th>Label</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="s : ${statuses}">
+                <td th:text="${s.statusId}"></td>
+                <td th:text="${s.statusCode}"></td>
+                <td th:text="${s.label}"></td>
+                <td>
+                    <span class="adm-pill"
+                          th:classappend="${s.active} ? ' adm-pill-approved' : ' adm-pill-risk'"
+                          th:text="${s.active} ? 'Active' : 'Disabled'">
+                    </span>
+                </td>
+                <td>
+                    <form th:action="@{/admin/settings/loan-application-statuses/{id}/toggle(id=${s.statusId})}" method="post">
+                        <button class="adm-btn"
+                                th:text="${s.active} ? 'Disable' : 'Enable'">
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </section>
+
+</div>

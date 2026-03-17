@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/staff_dashboard.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/staffUsersNavbar :: managerNavbarSection}"></div>
+
+<section class="st-hero">
+    <div class="st-hero-inner">
+        <h1 class="st-hero-title" th:text="'Review: ' + ${app.applicationNo}">Review</h1>
+        <p class="st-hero-sub"
+           th:text="${app.customer.name} + ' — ' + (${app.loanType != null ? app.loanType.loanTypeName : 'Loan'})">
+        </p>
+    </div>
+</section>
+
+<main class="st-wrap">
+    <div class="st-grid-2">
+        <!-- Left -->
+        <div>
+            <div class="st-card st-pad">
+                <h3 class="st-sec-title">Applicant Information</h3>
+
+                <div class="st-info-grid">
+                    <div class="st-info-item"><span class="st-info-key">Name:</span>
+                        <span th:text="${app.customer.name}">Name</span>
+                    </div>
+
+                    <div class="st-info-item"><span class="st-info-key">Email:</span>
+                        <span th:text="${app.customer.email}">Email</span>
+                    </div>
+
+                    <div class="st-info-item"><span class="st-info-key">Phone:</span>
+                        <span th:text="${app.customer.phone}">Phone</span>
+                    </div>
+
+                    <div class="st-info-item"><span class="st-info-key">Monthly Income:</span>
+                        <span th:text="'₹' + ${app.monthlyIncome}">₹0</span>
+                    </div>
+
+                    <div class="st-info-item"><span class="st-info-key">Purpose:</span>
+                        <span th:text="${app.purpose}">Purpose</span>
+                    </div>
+
+                    <div class="st-info-item"><span class="st-info-key">Amount:</span>
+                        <span th:text="'₹' + ${app.amountRequested}">₹0</span>
+                    </div>
+
+                    <div class="st-info-item"><span class="st-info-key">Tenure:</span>
+                        <span th:text="${app.tenureMonthsRequested} + ' months'">0</span>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="st-card st-pad st-mt-16">
+                <h3 class="st-sec-title">Officer Notes</h3>
+
+                <form th:action="@{/officer/application/{id}/mark-in-review(id=${app.applicationId})}" method="post">
+                <textarea name="officerNotes" class="st-textarea st-mt-12"
+                  placeholder="Add your review notes here..."
+                  th:text="${app.officerNotes}">
+                </textarea>
+
+                    <div class="st-actions" style="margin-top:12px;">
+                        <button class="st-btn st-btn-navy" type="submit">Mark IN_REVIEW</button>
+                    </div>
+                </form>
+            </div>
+            <div class="st-actions">
+                <!-- Request Info -->
+                <form th:action="@{/officer/application/{id}/request-info(id=${app.applicationId})}" method="post" style="display:inline;">
+                    <input type="hidden" name="officerNotes" th:value="${app.officerNotes}">
+                    <input class="st-input" name="needsInfoMessage" placeholder="Write what customer must upload..." required>
+                    <button class="st-btn" type="submit">Request Info</button>
+                </form>
+
+                <!-- Forward to Risk -->
+                <form th:action="@{/officer/application/{id}/forward-risk(id=${app.applicationId})}" method="post" style="display:inline;">
+                    <input type="hidden" name="officerNotes" th:value="${app.officerNotes}">
+                    <button class="st-btn st-btn-yellow" type="submit">Forward to Risk Officer</button>
+                </form>
+            </div>
+
+
+        </div>
+
+        <!-- Right -->
+        <div>
+            <div class="st-card st-pad">
+                <h3 class="st-sec-title">KYC Documents</h3>
+
+                <div class="st-doc-list">
+
+                    <div th:if="${documents == null || #lists.isEmpty(documents)}" class="st-doc-row">
+                        <div class="st-doc-left">No documents uploaded</div>
+                        <span class="st-pill st-pill-pending">Pending</span>
+                    </div>
+
+                    <div class="st-doc-row" th:each="d : ${documents}">
+                        <div class="st-doc-left">
+                            <i class="fa-regular fa-file-lines"></i>
+                            <span th:text="${d.documentType + ' (v' + d.versionNo + ')'}">PAN</span>
+                        </div>
+
+                        <div style="display:flex; gap:10px; align-items:center;">
+                        <span class="st-pill"
+                              th:classappend="${d.isLatest} ? ' st-pill-uploaded' : ' st-pill-pending'"
+                              th:text="${d.isLatest} ? 'Uploaded' : 'Pending'">Uploaded
+                        </span>
+
+                            <a class="st-btn st-btn-navy"
+                               th:href="@{'/files/' + ${d.filePath}}"
+                               target="_blank">
+                                View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="st-card st-pad st-mt-16">
+                <div class="st-status-line">
+                    <span class="st-info-key">Current Status:</span>
+                    <span class="st-pill st-pill-submitted"
+                          th:text="${app.status != null ? app.status.label : 'N/A'}">
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ✅ FOOTER (your bug is here: missing quote + bracket) -->
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<!-- ✅ JS should be at end -->
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/staff_dashboard.js}"></script>
+</body>
+</html>

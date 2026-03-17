@@ -1,0 +1,42 @@
+<!-- templates/fragments/header.html -->
+<header class="nav" th:fragment="navbarSection">
+    <div class="container nav-row">
+        <div class="brand">
+            <div class="brand-ico">🏢<i class=""></i></div>
+            <div class="brand-name">LoanHub</div>
+        </div>
+
+        <nav class="nav-links" id="navLinks">
+            <!-- Thymeleaf routes use karo -->
+            <a th:href="@{/}" class="active">Home</a>
+            <a th:href="@{/loan_card}">Loan Products</a>
+            <a th:href="@{/emi_calculator}">EMI Calculator</a>
+            <a th:href="@{/customer/track}">Track Application</a>
+            <a th:href="@{/faq_sqaure}">FAQ</a>
+            <a th:href="@{/contact}">Contact</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="dropdown">
+                <button class="btn btn-login" id="loginBtn" type="button">
+                    <i class="fa-regular fa-user"></i>
+                    Login
+                    <i class="fa-solid fa-chevron-down chev"></i>
+                </button>
+
+                <div class="dropdown-menu" id="loginMenu">
+                    <a th:href="@{/customer_login}"><i class="fa-regular fa-circle-user"></i> Customer Login</a>
+                    <a th:href="@{/auth/staff_login}"><i class="fa-solid fa-user-tie"></i> Staff Login</a>
+                    <div class="dd-line"></div>
+                    <a class="dd-register" th:href="@{/register}">
+                        <i class="fa-regular fa-pen-to-square"></i> Register
+                    </a>
+                </div>
+            </div>
+
+            <button class="hamburger" id="hamburger" aria-label="menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Settings - LoanHub</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+
+<body class="adm-page">
+
+<div class="adm-layout">
+    <div th:replace="~{fragments/admin_header :: navbarAdmin}"></div>
+
+    <main class="adm-content">
+
+        <div class="settings-shell">
+
+            <!-- Header Card -->
+            <section class="adm-topbar set-head">
+                <div>
+                    <h1 class="adm-h-title">Settings</h1>
+                    <p class="adm-h-sub">Manage masters & configurations</p>
+                </div>
+            </section>
+
+            <!-- Tabs -->
+            <div class="set-tabs">
+
+                <a class="set-tab"
+                   th:classappend="${param.tab != null and param.tab[0] == 'loan-application-statuses'} ? 'active' : ''"
+                   th:href="@{/admin/settings(tab='loan-application-statuses')}">
+                    <span class="tab-ico">🧾</span>
+                    <span>Loan Application Status</span>
+                </a>
+
+                <a class="set-tab"
+                   th:classappend="${param.tab != null and param.tab[0] == 'risk-recommendation-statuses'} ? 'active' : ''"
+                   th:href="@{/admin/settings(tab='risk-recommendation-statuses')}">
+                    <span class="tab-ico">🧠</span>
+                    <span>Risk Recommendation Status</span>
+                </a>
+
+                <a class="set-tab"
+                   th:classappend="${param.tab != null and param.tab[0] == 'roles'} ? 'active' : ''"
+                   th:href="@{/admin/settings(tab='roles')}">
+                    <span class="tab-ico">👤</span>
+                    <span>Added Roles</span>
+                </a>
+
+                <a class="set-tab"
+                   th:classappend="${param.tab == null or param.tab[0] == 'loan-types'} ? 'active' : ''"
+                   th:href="@{/admin/settings(tab='loan-types')}">
+                    <span class="tab-ico">📌</span>
+                    <span>Loan Types</span>
+                </a>
+            </div>
+
+            <!-- Content -->
+            <section class="set-content">
+                <div class="set-content-inner" th:switch="${param.tab == null ? 'loan-types' : param.tab[0]}">
+
+
+                    <div th:case="'loan-application-statuses'">
+                        <div th:replace="~{admin/settings/loan_application_statuses :: pageContent}"></div>
+                    </div>
+
+                    <div th:case="'risk-recommendation-statuses'">
+                        <div th:replace="~{admin/settings/risk_recommendation_statuses :: pageContent}"></div>
+                    </div>
+
+                    <div th:case="'roles'">
+                        <div th:replace="~{admin/settings/role_added :: pageContent}"></div>
+                    </div>
+
+                    <div th:case="'loan-types'">
+                        <div th:replace="~{admin/settings/loan_types :: pageContent}"></div>
+                    </div>
+
+
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

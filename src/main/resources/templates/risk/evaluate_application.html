@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanHub - Risk Evaluation</title>
+
+    <link rel="stylesheet" th:href="@{/css/loanhub.css}">
+    <link rel="stylesheet" th:href="@{/css/staff_dashboard.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/staffUsersNavbar :: managerNavbarSection}"></div>
+
+<section class="st-hero">
+    <div class="st-hero-inner">
+        <h1 class="st-hero-title">
+            Risk Evaluation: <span th:text="${app.applicationNo}">LH-2024-0002</span>
+        </h1>
+        <p class="st-hero-sub">
+            <span th:text="${app.customer.name}">Priya Patel</span>
+            —
+            <span th:text="'₹' + ${#numbers.formatDecimal(app.amountRequested, 0, 'COMMA', 0, 'POINT')}">₹35,00,000</span>
+        </p>
+    </div>
+</section>
+
+<main class="st-wrap">
+    <form th:action="@{/risk/evaluate/{id}(id=${app.applicationId})}" method="post">
+        <div class="st-grid-2-eq">
+
+            <div class="st-card st-pad">
+                <h3 class="st-sec-title">Applicant Summary</h3>
+
+                <div class="st-info-grid">
+                    <div class="st-info-item">
+                        <span class="st-info-key">Employer:</span>
+                        <span th:text="${app.employerName}">Infosys</span>
+                    </div>
+
+                    <div class="st-info-item">
+                        <span class="st-info-key">Income:</span>
+                        <span th:text="'₹' + ${#numbers.formatDecimal(app.monthlyIncome, 0, 'COMMA', 0, 'POINT')} + '/mo'">₹95,000/mo</span>
+                    </div>
+
+                    <div class="st-info-item">
+                        <span class="st-info-key">Loan Amount:</span>
+                        <span th:text="'₹' + ${#numbers.formatDecimal(app.amountRequested, 0, 'COMMA', 0, 'POINT')}">₹35,00,000</span>
+                    </div>
+
+                    <div class="st-info-item">
+                        <span class="st-info-key">Tenure:</span>
+                        <span th:text="${app.tenureMonthsRequested} + ' months'">240 months</span>
+                    </div>
+                </div>
+
+                <div class="st-label">Officer Notes:</div>
+                <div class="st-note-box"
+                     th:text="${app.officerNotes != null ? app.officerNotes : 'No notes available'}">
+                    No notes available
+                </div>
+
+                <div th:if="${existingAssessment != null}" class="st-mt-12">
+                    <div class="st-label">Previous Risk Result</div>
+                    <div class="st-note-box">
+                        <div><strong>Recommendation:</strong>
+                            <span th:text="${existingAssessment.recommendationStatus.label}">Recommended</span>
+                        </div>
+                        <div class="st-mt-8"><strong>Risk Score:</strong>
+                            <span th:text="${existingAssessment.riskScore}">82</span>
+                        </div>
+                        <div class="st-mt-8"><strong>Remarks:</strong>
+                            <span th:text="${existingAssessment.remarks}">Good applicant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="st-card st-pad">
+                <h3 class="st-sec-title">Risk Assessment</h3>
+
+                <div class="st-form-2 st-mt-12">
+                    <div>
+                        <label class="st-label" style="margin-top:0;">Monthly Income (₹)</label>
+                        <input class="st-input"
+                               type="number"
+                               step="0.01"
+                               name="monthlyIncome"
+                               th:value="${app.monthlyIncome != null ? app.monthlyIncome : 0}"
+                               required>
+                    </div>
+                    <div>
+                        <label class="st-label" style="margin-top:0;">Existing EMIs (₹)</label>
+                        <input class="st-input"
+                               type="number"
+                               step="0.01"
+                               name="existingEmis"
+                               th:value="${app.existingEmis != null ? app.existingEmis : 0}"
+                               required>
+                    </div>
+                </div>
+
+                <div class="st-note-box st-mt-12">
+                    <div style="font-size:12px; color:#64748b; font-weight:700;">DTI / FOIR Ratio</div>
+                    <div style="font-size:24px; font-weight:900; color:#0f172a; margin-top:4px;"
+                         th:text="${foir} + '%'">15.4%</div>
+                </div>
+
+                <label class="st-label">Recommendation</label>
+                <select class="st-select" name="recommendation" required>
+                    <option value="">Select</option>
+                    <option value="APPROVE">Approve</option>
+                    <option value="REJECT">Reject</option>
+                    <option value="NEED_MORE_INFO">Need More Info</option>
+                </select>
+
+                <label class="st-label">Notes</label>
+                <textarea class="st-textarea"
+                          name="notes"
+                          placeholder="Risk assessment notes..."></textarea>
+
+                <button class="st-btn st-btn-yellow st-btn-block st-mt-12" type="submit">
+                    Submit Evaluation
+                </button>
+            </div>
+        </div>
+    </form>
+</main>
+
+<div th:replace="~{fragments/footer :: footerSection}"></div>
+
+<script th:src="@{/js/loanhub.js}"></script>
+<script th:src="@{/js/staff_dashboard.js}"></script>
+</body>
+</html>

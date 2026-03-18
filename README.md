@@ -99,6 +99,10 @@ static/
 3. Run the project using Maven
 4. Open browser at localhost
 
+## Configuration
+- Local development uses `application-local.properties`
+- Production deployment uses Railway environment variables and `application-prod.properties`
+
 ## Deployment
 Deployed on Railway with MySQL database.
 

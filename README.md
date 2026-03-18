@@ -1,4 +1,4 @@
-<img width="2652" height="6138" alt="loan-management-system-spring-boot-production up railway app_" src="https://github.com/user-attachments/assets/fddd4d3c-0cb0-4886-953d-9947aac81b53" /># 🏦 Loan Management System 
+# 🏦 Loan Management System 
 
 A full-stack Loan Management System built using Spring Boot, Thymeleaf, MySQL, and deployed on Railway.
 

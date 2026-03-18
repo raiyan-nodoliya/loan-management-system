@@ -20,16 +20,16 @@ public class AuditLog {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "actor_email", nullable = false, length = 80)
+    @Column(name = "actor_email", nullable = false, length = 50)
     private String actorEmail;
 
-    @Column(nullable = false, length = 120)
+    @Column(nullable = false, length = 20)
     private String action;
 
-    @Column(nullable = false, length = 60)
+    @Column(nullable = false, length = 20)
     private String module;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 8)
     private String status; // SUCCESS / FAILED
 
     @Column(length = 255)

@@ -17,10 +17,10 @@ public class RiskRecommendationStatus {
     @Column(name = "rr_status_id")
     private Long id;
 
-    @Column(name = "status_code", nullable = false, unique = true, length = 40)
+    @Column(name = "status_code", nullable = false, unique = true, length = 20)
     private String statusCode;
 
-    @Column(name = "label", nullable = false, length = 80)
+    @Column(name = "label", nullable = false, length = 40)
     private String label;
 
     @Column(name = "is_active", nullable = false)

@@ -35,7 +35,7 @@ public class RiskAssessment {
     @Column(name = "risk_score")
     private Integer riskScore;
 
-    @Column(length = 500)
+    @Column(length = 300)
     private String remarks;
 
     @Column(name = "assessed_at")

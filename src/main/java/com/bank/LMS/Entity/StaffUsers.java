@@ -15,10 +15,10 @@ public class StaffUsers {
     @Column(name = "staff_id")
     private Long staffId;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 25)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 150)
+    @Column(nullable = false, unique = true, length = 80)
     private String email;
 
     @Column(name = "password_hash", nullable = false, length = 255)
@@ -28,7 +28,7 @@ public class StaffUsers {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @Column(length = 20)
+    @Column(length = 10)
     private String phone;
 
     @Column(nullable = false)

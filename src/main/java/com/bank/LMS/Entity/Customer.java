@@ -22,14 +22,14 @@ public class Customer {
     private Long customerId;
 
     @NotBlank(message = "Name is required")
-    @Size(max = 100, message = "Name max 100 characters")
-    @Column(nullable = false, length = 100)
+    @Size(max = 30, message = "Name max 50 characters")
+    @Column(nullable = false, length = 30)
     private String name;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
-    @Size(max = 150, message = "Email max 150 characters")
-    @Column(nullable = false, unique = true, length = 150)
+    @Size(max = 80, message = "Email max 80 characters")
+    @Column(nullable = false, unique = true, length = 80)
     private String email;
 
     @NotBlank(message = "Password is required")
@@ -38,7 +38,7 @@ public class Customer {
     private String passwordHash;
 
     @Pattern(regexp = "^[6-9]\\d{9}$", message = "Enter valid 10-digit phone")
-    @Column(unique = true, length = 20)
+    @Column(unique = true, length = 10)
     private String phone;
 
     @Past(message = "DOB must be in the past")
@@ -48,12 +48,12 @@ public class Customer {
     @Column(length = 255)
     private String address;
 
-    @Size(max = 80, message = "City max 80 characters")
-    @Column(length = 80)
+    @Size(max = 10, message = "City max 80 characters")
+    @Column(length = 10)
     private String city;
 
-    @Size(max = 80, message = "State max 80 characters")
-    @Column(length = 80)
+    @Size(max = 10, message = "State max 80 characters")
+    @Column(length = 10)
     private String state;
 
     @Pattern(regexp = "^[0-9]{4,12}$", message = "Pincode must be 4–12 digits")
@@ -68,7 +68,7 @@ public class Customer {
     private LocalDateTime createdAt;
 
 
-    @Column(length = 10)
+    @Column(length = 6)
     private String gender;
 
     @PrePersist

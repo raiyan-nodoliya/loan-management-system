@@ -29,7 +29,8 @@ A full-stack Loan Management System built using Spring Boot, Thymeleaf, MySQL, a
 ## Screenshots
 
 ### Home Page
-![Home Page](<img width="2652" height="6138" alt="loan-management-system-spring-boot-production up railway app_" src="https://github.com/user-attachments/assets/c61e8b9e-1431-4514-ab14-5bf6fea382bc" />)
+![Home Page]
+<img width="2652" height="6138" alt="loan-management-system-spring-boot-production up railway app_" src="https://github.com/user-attachments/assets/c61e8b9e-1431-4514-ab14-5bf6fea382bc" />
 
 
 ### Our Loan Products
